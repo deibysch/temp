@@ -1,0 +1,105 @@
+"use client"
+
+import type React from "react"
+
+import { useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Eye, EyeOff } from "lucide-react"
+
+export default function Login() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter()
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // En un caso real, aquí iría la lógica de autenticación
+    router.push("/dashboard")
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="flex flex-col items-center">
+          <div className="relative h-24 w-24 mb-2">
+            <div className="absolute inset-0 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+              <Image
+                src="/images/ahorraya-logo.png"
+                alt="AhorraYa Logo"
+                width={60}
+                height={60}
+                className="object-contain"
+              />
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold mt-6">Iniciar Sesión</h1>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="email" className="text-sm font-medium text-foreground">
+              Correo electrónico
+            </label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="ejemplo@correo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="h-12"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="password" className="text-sm font-medium text-foreground">
+              Contraseña
+            </label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Ingresa tu contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="h-12 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <Link href="/forgot-password" className="text-sm text-green-500 hover:text-green-600">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
+
+          <Button type="submit" className="w-full h-12 bg-green-500 hover:bg-green-600">
+            Iniciar Sesión
+          </Button>
+        </form>
+
+        <div className="text-center mt-4">
+          <p className="text-sm text-muted-foreground">
+            ¿No tienes una cuenta?{" "}
+            <Link href="/register" className="text-green-500 hover:text-green-600 font-medium">
+              Regístrate
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

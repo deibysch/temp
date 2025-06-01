@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, MapPin, Clock, Users } from "lucide-react"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export default function Home() {
   const companies = [
@@ -70,7 +71,8 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex items-center space-x-2">
+            <ThemeToggle />
             <Link to="/login">
               <Button variant="outline" size="sm" className="text-xs px-3">
                 Iniciar Sesión

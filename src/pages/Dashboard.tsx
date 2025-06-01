@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PiggyBank, Wallet, CreditCard, TrendingUp, Bell, Settings, LogOut } from "lucide-react"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export default function Dashboard() {
   const [userName] = useState("Juan")
@@ -32,9 +33,7 @@ export default function Dashboard() {
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
+            <ThemeToggle />
             <Button variant="ghost" size="icon" onClick={handleLogout}>
               <LogOut className="h-5 w-5" />
             </Button>

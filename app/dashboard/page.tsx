@@ -21,10 +21,15 @@ export default function Dashboard() {
       <header className="bg-card border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <div className="relative h-10 w-10 mr-2">
-              <Image src="/images/ahorraya-logo.png" alt="AhorraYa Logo" fill className="object-contain" />
+            <div className="relative h-10 w-auto">
+              <Image
+                src="/images/ahorraya-logo-horizontal.png"
+                alt="AhorraYa Logo"
+                width={120}
+                height={40}
+                className="object-contain"
+              />
             </div>
-            <span className="text-xl font-bold text-green-500">AhorraYa</span>
           </div>
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="icon">

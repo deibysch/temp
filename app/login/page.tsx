@@ -26,18 +26,16 @@ export default function Login() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center">
-          <div className="relative h-24 w-24 mb-2">
-            <div className="absolute inset-0 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-              <Image
-                src="/images/ahorraya-logo.png"
-                alt="AhorraYa Logo"
-                width={60}
-                height={60}
-                className="object-contain"
-              />
-            </div>
+          <div className="relative w-48 h-32 mb-6">
+            <Image
+              src="/images/ahorraya-logo-vertical.png"
+              alt="AhorraYa Logo"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
-          <h1 className="text-2xl font-bold mt-6">Iniciar Sesión</h1>
+          <h1 className="text-2xl font-bold">Iniciar Sesión</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

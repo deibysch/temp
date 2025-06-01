@@ -28,21 +28,19 @@ export default function ForgotPassword() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
       <div className="w-full max-w-md space-y-6">
-        <div className="flex items-center">
-          <Link href="/login" className="text-gray-500 hover:text-gray-700">
+        <div className="flex items-start">
+          <Link href="/login" className="text-gray-500 hover:text-gray-700 mt-2">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="flex-1 text-center">
-            <div className="relative h-24 w-24 mx-auto mb-2">
-              <div className="absolute inset-0 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                <Image
-                  src="/images/ahorraya-logo.png"
-                  alt="AhorraYa Logo"
-                  width={60}
-                  height={60}
-                  className="object-contain"
-                />
-              </div>
+            <div className="relative w-40 h-28 mx-auto mb-4">
+              <Image
+                src="/images/ahorraya-logo-vertical.png"
+                alt="AhorraYa Logo"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
             <h1 className="text-2xl font-bold">Recuperar Contraseña</h1>
           </div>

@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom"
-import Home from "./pages/Home"
-import Login from "./pages/Login"
-import Register from "./pages/Register"
-import ForgotPassword from "./pages/ForgotPassword"
+import Home from "./pages/auth/Home"
+import Login from "./pages/auth/Login"
+import Register from "./pages/auth/Register"
+import ForgotPassword from "./pages/auth/ForgotPassword"
 import Dashboard from "./pages/Dashboard"
 
 function App() {

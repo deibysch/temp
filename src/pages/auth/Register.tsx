@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ChevronLeft } from "lucide-react"
+import { register } from "./authApi"
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,8 @@ export default function Register() {
     gender: "",
     email: "",
   })
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,10 +32,32 @@ export default function Register() {
     setFormData((prev) => ({ ...prev, gender: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // En un caso real, aquí iría la lógica de registro
-    navigate("/dashboard")
+    setLoading(true)
+    setError(null)
+    try {
+      // Ajustar los nombres de campos si el backend espera otros nombres
+      const res = await register({
+        name: formData.fullName,
+        id_number: formData.idNumber,
+        birth_date: formData.birthDate,
+        phone: formData.phone,
+        gender: formData.gender,
+        email: formData.email,
+      })
+      if (res.id || res.success) {
+        navigate("/dashboard")
+      } else if (res.detail || res.error) {
+        setError(res.detail || res.error || "Error al registrar")
+      } else {
+        setError("Error al registrar")
+      }
+    } catch (err) {
+      setError("Error de red o del servidor")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -56,6 +81,9 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="text-red-600 text-sm text-center">{error}</div>
+          )}
           <div className="space-y-2">
             <label htmlFor="fullName" className="text-sm font-medium text-foreground">
               Nombre completo
@@ -67,6 +95,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="h-12"
+              disabled={loading}
             />
           </div>
 
@@ -81,6 +110,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="h-12"
+              disabled={loading}
             />
           </div>
 
@@ -95,6 +125,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="h-12"
+              disabled={loading}
             />
           </div>
 
@@ -109,6 +140,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="h-12"
+              disabled={loading}
             />
           </div>
 
@@ -116,7 +148,7 @@ export default function Register() {
             <label htmlFor="gender" className="text-sm font-medium text-foreground">
               Sexo
             </label>
-            <Select onValueChange={handleSelectChange}>
+            <Select onValueChange={handleSelectChange} disabled={loading}>
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="Selecciona tu sexo" />
               </SelectTrigger>
@@ -140,11 +172,12 @@ export default function Register() {
               onChange={handleChange}
               required
               className="h-12"
+              disabled={loading}
             />
           </div>
 
-          <Button type="submit" className="w-full h-12 bg-green-500 hover:bg-green-600 mt-4">
-            Crear Cuenta
+          <Button type="submit" className="w-full h-12 bg-green-500 hover:bg-green-600 mt-4" disabled={loading}>
+            {loading ? "Registrando..." : "Crear Cuenta"}
           </Button>
         </form>
 

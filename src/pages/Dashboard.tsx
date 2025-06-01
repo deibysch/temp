@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PiggyBank, Wallet, CreditCard, TrendingUp, Bell, Settings, LogOut } from "lucide-react"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { logout } from "./auth/authApi"
 
 export default function Dashboard() {
   const [userName] = useState("Juan")
   const navigate = useNavigate()
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logout()
     navigate("/login")
   }
 

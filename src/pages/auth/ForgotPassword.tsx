@@ -7,21 +7,23 @@ import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ChevronLeft } from "lucide-react"
+import { forgotPassword } from "./authApi"
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("")
   const [isSending, setIsSending] = useState(false)
   const [isSent, setIsSent] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSending(true)
-
-    // Simulamos el envío de instrucciones
-    setTimeout(() => {
-      setIsSending(false)
+    try {
+      await forgotPassword(email)
       setIsSent(true)
-    }, 2000)
+    } catch (e) {
+      
+    }
+    setIsSending(false)
   }
 
   return (

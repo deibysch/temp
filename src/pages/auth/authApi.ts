@@ -10,8 +10,7 @@ export async function login(email: string, password: string) {
 }
 
 export async function register(data: object) {
-  const res = await POST(ENDPOINTS.REGISTER, data)
-  return res
+  return await POST(ENDPOINTS.REGISTER, data);
 }
 
 export async function logout() {
@@ -24,4 +23,12 @@ export async function changePassword(current_password: string, new_password: str
   const res = await POST(ENDPOINTS.LOGIN, {current_password, new_password, new_password_confirmation})
   localStorage.removeItem("token")
   return res
+}
+
+export async function forgotPassword(email: string) {
+  return await POST(ENDPOINTS.FORGOT_PASSWORD, { email });
+}
+
+export async function resetPassword(data: { email: string, token: string, password: string, password_confirmation: string }) {
+  return await POST(ENDPOINTS.RESET_PASSWORD, data);
 }

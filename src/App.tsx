@@ -3,6 +3,7 @@ import Home from "./pages/auth/Home"
 import Login from "./pages/auth/Login"
 import Register from "./pages/auth/Register"
 import ForgotPassword from "./pages/auth/ForgotPassword"
+import ResetPassword from "./pages/auth/ResetPassword"
 import Dashboard from "./pages/Dashboard"
 import { AuthRedirect } from "./components/AuthRedirect"
 
@@ -20,7 +21,16 @@ function App() {
           <Register />
         </AuthRedirect>
       } />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/forgot-password" element={
+        <AuthRedirect>
+          <ForgotPassword />
+        </AuthRedirect>
+      } />
+      <Route path="/reset-password" element={
+        <AuthRedirect>
+          <ResetPassword />
+        </AuthRedirect>
+      } />
       <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   )

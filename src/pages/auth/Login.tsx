@@ -13,25 +13,19 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setError(null)
     try {
       const res = await login(email, password)
       if (res.token) {
         navigate("/dashboard")
-      } else if (res.detail || res.error) {
-        setError(res.detail || res.error || "Error al iniciar sesión")
-      } else {
-        setError("Error al iniciar sesión")
       }
     } catch (err) {
-      setError("Error de red o del servidor")
+
     } finally {
       setLoading(false)
     }
@@ -52,9 +46,6 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
-          )}
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium text-foreground">
               Correo electrónico

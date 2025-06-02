@@ -19,7 +19,6 @@ export default function Register() {
     gender: "",
     email: "",
   })
-  const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -35,9 +34,7 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setError(null)
     try {
-      // Ajustar los nombres de campos si el backend espera otros nombres
       const res = await register({
         name: formData.fullName,
         id_number: formData.idNumber,
@@ -48,13 +45,9 @@ export default function Register() {
       })
       if (res.id || res.success) {
         navigate("/dashboard")
-      } else if (res.detail || res.error) {
-        setError(res.detail || res.error || "Error al registrar")
-      } else {
-        setError("Error al registrar")
       }
     } catch (err) {
-      setError("Error de red o del servidor")
+      
     } finally {
       setLoading(false)
     }
@@ -81,9 +74,6 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
-          )}
           <div className="space-y-2">
             <label htmlFor="fullName" className="text-sm font-medium text-foreground">
               Nombre completo

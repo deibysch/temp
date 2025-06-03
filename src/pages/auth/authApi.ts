@@ -1,5 +1,5 @@
 import { POST } from "@/services/http";
-import { ENDPOINTS } from "@/constants/ApiClient";
+import { ENDPOINTS } from "@/constants/apiClient";
 import { showSuccessToast, showInfoToast } from "@/lib/toast-utils";
 
 export async function login(email: string, password: string) {

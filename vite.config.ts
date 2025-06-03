@@ -12,6 +12,10 @@ export default defineConfig({
   },
   server: {
     host: true, // permite acceder desde la red local
-    port: 5173, // o el puerto que prefieras
+    port: 80,
+    allowedHosts: [
+      "localhost",
+      "ahorraya.shop"
+    ]
   },
 })

@@ -9,24 +9,12 @@ function getAuthHeaders() {
   return { ...defaultHeaders, Authorization: `Bearer ${token}` }
 }
 
-async function handleResponse(response: Response, method: string) {
+async function handleResponse(response: Response) {
   const data = await response.json()
 
   if (!response.ok) {
     const errorMessage = data.message || data.detail || data.error || `Error ${response.status}`
     showErrorToast("Error", errorMessage)
-    throw new Error(errorMessage)
-  }
-
-  // Show success toast for write operations
-  if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
-    const successMessages = {
-      POST: "Creado exitosamente",
-      PUT: "Actualizado exitosamente",
-      PATCH: "Actualizado exitosamente",
-      DELETE: "Eliminado exitosamente",
-    }
-    showSuccessToast("Éxito", successMessages[method as keyof typeof successMessages])
   }
 
   return data
@@ -37,7 +25,7 @@ export async function GET(url: string, headers?: object) {
     const res = await fetch(url, {
       headers: { ...getAuthHeaders(), ...headers },
     })
-    return await handleResponse(res, "GET")
+    return await handleResponse(res)
   } catch (error) {
     if (error instanceof Error) {
       showErrorToast("Error de conexión", error.message)
@@ -53,7 +41,7 @@ export async function POST(url: string, data?: any, headers?: object) {
       headers: { ...getAuthHeaders(), ...headers },
       body: data ? JSON.stringify(data) : undefined,
     })
-    return await handleResponse(res, "POST")
+    return await handleResponse(res)
   } catch (error) {
     if (error instanceof Error) {
       showErrorToast("Error de conexión", error.message)
@@ -69,7 +57,7 @@ export async function PUT(url: string, data?: any, headers?: object) {
       headers: { ...getAuthHeaders(), ...headers },
       body: data ? JSON.stringify(data) : undefined,
     })
-    return await handleResponse(res, "PUT")
+    return await handleResponse(res)
   } catch (error) {
     if (error instanceof Error) {
       showErrorToast("Error de conexión", error.message)
@@ -85,7 +73,7 @@ export async function PATCH(url: string, data?: any, headers?: object) {
       headers: { ...getAuthHeaders(), ...headers },
       body: data ? JSON.stringify(data) : undefined,
     })
-    return await handleResponse(res, "PATCH")
+    return await handleResponse(res)
   } catch (error) {
     if (error instanceof Error) {
       showErrorToast("Error de conexión", error.message)
@@ -100,7 +88,7 @@ export async function DELETE(url: string, headers?: object) {
       method: "DELETE",
       headers: { ...getAuthHeaders(), ...headers },
     })
-    return await handleResponse(res, "DELETE")
+    return await handleResponse(res)
   } catch (error) {
     if (error instanceof Error) {
       showErrorToast("Error de conexión", error.message)

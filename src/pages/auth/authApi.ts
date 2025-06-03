@@ -1,54 +1,57 @@
-import { POST } from "@/services/http"
-import { ENDPOINTS } from "@/constants/ApiClient"
-import { showSuccessToast } from "@/lib/toast-utils"
+import { POST } from "@/services/http";
+import { ENDPOINTS } from "@/constants/ApiClient";
+import { showSuccessToast, showInfoToast } from "@/lib/toast-utils";
 
 export async function login(email: string, password: string) {
-  const res = await POST(ENDPOINTS.LOGIN, { email, password }, {}, false)
+  const loading = showInfoToast("Iniciando sesión...", "Por favor espera");
+  const res = await POST(ENDPOINTS.LOGIN, { email, password });
   if (res.token) {
-    localStorage.setItem("token", res.token)
-    showSuccessToast("¡Bienvenido!", "Has iniciado sesión correctamente")
+    localStorage.setItem("token", res.token);
+    showSuccessToast("¡Bienvenido!", "Has iniciado sesión correctamente");
   }
-  return res
+  loading.dismiss();
+  return res;
 }
 
 export async function register(data: object) {
-  const res = await POST(ENDPOINTS.REGISTER, data, {}, false)
+  const loading = showInfoToast("Registrando usuario...", "Por favor espera");
+  const res = await POST(ENDPOINTS.REGISTER, data);
   if (res.id || res.success) {
-    showSuccessToast("¡Cuenta creada!", "Tu registro se completó exitosamente")
+    showSuccessToast("¡Cuenta creada!", "Tu registro se completó exitosamente");
   }
-  return res
+  loading.dismiss();
+  return res;
 }
 
 export async function logout() {
-  const res = await POST(ENDPOINTS.LOGOUT, {}, {}, false)
-  localStorage.removeItem("token")
-  showSuccessToast("Sesión cerrada", "Has cerrado sesión correctamente")
-  return res
+  const loading = showInfoToast("Cerrando sesión...", "Por favor espera");
+  const res = await POST(ENDPOINTS.LOGOUT, {});
+  localStorage.removeItem("token");
+  showSuccessToast("Sesión cerrada", "Has cerrado sesión correctamente");
+  loading.dismiss();
+  return res;
 }
 
-export async function changePassword(
-  current_password: string,
-  new_password: string,
-  new_password_confirmation: string,
-) {
-  const res = await POST(ENDPOINTS.CHANGE_PASSWORD, { current_password, new_password, new_password_confirmation })
-  localStorage.removeItem("token")
-  return res
+export async function changePassword(current_password: string, new_password: string, new_password_confirmation: string) {
+  const loading = showInfoToast("Cambiando contraseña...", "Por favor espera");
+  const res = await POST(ENDPOINTS.CHANGE_PASSWORD, { current_password, new_password, new_password_confirmation });
+  localStorage.removeItem("token");
+  loading.dismiss();
+  return res;
 }
 
 export async function forgotPassword(email: string) {
-  const res = await POST(ENDPOINTS.FORGOT_PASSWORD, { email }, {}, false)
-  showSuccessToast("Correo enviado", "Revisa tu bandeja de entrada para restablecer tu contraseña")
-  return res
+  const loading = showInfoToast("Enviando correo...", "Por favor espera");
+  const res = await POST(ENDPOINTS.FORGOT_PASSWORD, { email });
+  showSuccessToast("Correo enviado", "Revisa tu bandeja de entrada para restablecer tu contraseña");
+  loading.dismiss();
+  return res;
 }
 
-export async function resetPassword(data: {
-  email: string
-  token: string
-  password: string
-  password_confirmation: string
-}) {
-  const res = await POST(ENDPOINTS.RESET_PASSWORD, data, {}, false)
-  showSuccessToast("Contraseña restablecida", "Tu contraseña ha sido actualizada correctamente")
-  return res
+export async function resetPassword(data: { email: string; token: string; password: string; password_confirmation: string }) {
+  const loading = showInfoToast("Restableciendo contraseña...", "Por favor espera");
+  const res = await POST(ENDPOINTS.RESET_PASSWORD, data);
+  showSuccessToast("Contraseña restablecida", "Tu contraseña ha sido actualizada correctamente");
+  loading.dismiss();
+  return res;
 }

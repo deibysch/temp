@@ -17,7 +17,7 @@ export const showErrorToast = (title: string, description?: string) => {
 }
 
 export const showInfoToast = (title: string, description?: string) => {
-  toast({
+  return toast({
     variant: "default",
     title,
     description,

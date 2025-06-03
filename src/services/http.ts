@@ -46,14 +46,14 @@ export async function GET(url: string, headers?: object) {
   }
 }
 
-export async function POST(url: string, data?: any, headers?: object, showToast = true) {
+export async function POST(url: string, data?: any, headers?: object) {
   try {
     const res = await fetch(url, {
       method: "POST",
       headers: { ...getAuthHeaders(), ...headers },
       body: data ? JSON.stringify(data) : undefined,
     })
-    return await handleResponse(res, showToast ? "POST" : "GET")
+    return await handleResponse(res, "POST")
   } catch (error) {
     if (error instanceof Error) {
       showErrorToast("Error de conexión", error.message)

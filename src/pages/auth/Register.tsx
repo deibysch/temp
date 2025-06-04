@@ -12,12 +12,16 @@ import { register } from "./authApi"
 
 export default function Register() {
   const [formData, setFormData] = useState({
-    fullName: "",
-    idNumber: "",
-    birthDate: "",
-    phone: "",
-    gender: "",
     email: "",
+    password: "",
+    password_confirmation: "",
+    name: "",
+    pat_surname: "",
+    mat_surname: "",
+    ci: "",
+    birthdate: "",
+    phone_number: "",
+    gender: "",
   })
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -36,12 +40,16 @@ export default function Register() {
     setLoading(true)
     try {
       const res = await register({
-        name: formData.fullName,
-        id_number: formData.idNumber,
-        birth_date: formData.birthDate,
-        phone: formData.phone,
-        gender: formData.gender,
         email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+        name: formData.name,
+        pat_surname: formData.pat_surname,
+        mat_surname: formData.mat_surname,
+        ci: formData.ci,
+        birthdate: formData.birthdate,
+        phone_number: formData.phone_number,
+        gender: formData.gender,
       })
       if (res.id || res.success) {
         navigate("/dashboard")
@@ -75,81 +83,99 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="fullName" className="text-sm font-medium text-foreground">
-              Nombre completo
+            <label htmlFor="name" className="text-sm font-medium text-foreground">
+              Nombres
             </label>
             <Input
-              id="fullName"
-              placeholder="Nombre y apellido"
-              value={formData.fullName}
+              id="name"
+              placeholder="Nombres"
+              value={formData.name}
               onChange={handleChange}
               required
               className="h-12"
               disabled={loading}
             />
           </div>
-
           <div className="space-y-2">
-            <label htmlFor="idNumber" className="text-sm font-medium text-foreground">
-              Cédula de identidad
+            <label htmlFor="pat_surname" className="text-sm font-medium text-foreground">
+              Apellido paterno
             </label>
             <Input
-              id="idNumber"
+              id="pat_surname"
+              placeholder="Apellido paterno"
+              value={formData.pat_surname}
+              onChange={handleChange}
+              className="h-12"
+              disabled={loading}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="mat_surname" className="text-sm font-medium text-foreground">
+              Apellido materno
+            </label>
+            <Input
+              id="mat_surname"
+              placeholder="Apellido materno"
+              value={formData.mat_surname}
+              onChange={handleChange}
+              className="h-12"
+              disabled={loading}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="ci" className="text-sm font-medium text-foreground">
+              Cédula de identidad (sin extensión)
+            </label>
+            <Input
+              id="ci"
               placeholder="Ej: 12345678"
-              value={formData.idNumber}
+              value={formData.ci}
               onChange={handleChange}
               required
               className="h-12"
               disabled={loading}
             />
           </div>
-
           <div className="space-y-2">
-            <label htmlFor="birthDate" className="text-sm font-medium text-foreground">
+            <label htmlFor="birthdate" className="text-sm font-medium text-foreground">
               Fecha de nacimiento
             </label>
             <Input
-              id="birthDate"
+              id="birthdate"
               type="date"
-              value={formData.birthDate}
+              value={formData.birthdate}
               onChange={handleChange}
-              required
               className="h-12"
               disabled={loading}
             />
           </div>
-
           <div className="space-y-2">
-            <label htmlFor="phone" className="text-sm font-medium text-foreground">
+            <label htmlFor="phone_number" className="text-sm font-medium text-foreground">
               Teléfono
             </label>
             <Input
-              id="phone"
+              id="phone_number"
               placeholder="Ej: 09XXXXXXXX"
-              value={formData.phone}
+              value={formData.phone_number}
               onChange={handleChange}
-              required
               className="h-12"
               disabled={loading}
             />
           </div>
-
           <div className="space-y-2">
             <label htmlFor="gender" className="text-sm font-medium text-foreground">
-              Sexo
+              Género
             </label>
             <Select onValueChange={handleSelectChange} disabled={loading}>
               <SelectTrigger className="h-12">
-                <SelectValue placeholder="Selecciona tu sexo" />
+                <SelectValue placeholder="Selecciona tu género" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="male">Masculino</SelectItem>
                 <SelectItem value="female">Femenino</SelectItem>
-                <SelectItem value="other">Otro</SelectItem>
               </SelectContent>
             </Select>
           </div>
-
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium text-foreground">
               Correo electrónico
@@ -165,7 +191,38 @@ export default function Register() {
               disabled={loading}
             />
           </div>
-
+          <div className="space-y-2">
+            <label htmlFor="password" className="text-sm font-medium text-foreground">
+              Contraseña
+            </label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Contraseña"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              minLength={8}
+              className="h-12"
+              disabled={loading}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="password_confirmation" className="text-sm font-medium text-foreground">
+              Confirmar contraseña
+            </label>
+            <Input
+              id="password_confirmation"
+              type="password"
+              placeholder="Repite la contraseña"
+              value={formData.password_confirmation}
+              onChange={handleChange}
+              required
+              minLength={8}
+              className="h-12"
+              disabled={loading}
+            />
+          </div>
           <Button type="submit" className="w-full h-12 bg-green-500 hover:bg-green-600 mt-4" disabled={loading}>
             {loading ? "Registrando..." : "Crear Cuenta"}
           </Button>

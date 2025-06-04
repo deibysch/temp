@@ -18,7 +18,19 @@ export async function login(email: string, password: string) {
   }
 }
 
-export async function register(data: object) {
+
+export async function register(data: {
+  email: string;
+  password: string;
+  password_confirmation: string;
+  name: string;
+  pat_surname?: string;
+  mat_surname?: string;
+  ci: string;
+  birthdate?: string;
+  phone_number?: string;
+  gender?: "male" | "female";
+}) {
   const loading = showInfoToast("Registrando usuario...", "Por favor espera");
   try {
     const res = await POST(ENDPOINTS.REGISTER, data);

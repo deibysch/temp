@@ -1,6 +1,7 @@
 import { showSuccessToast, showErrorToast } from "@/lib/toast-utils"
 
 const defaultHeaders = {
+  "Accept": "application/json",
   "Content-Type": "application/json",
 }
 

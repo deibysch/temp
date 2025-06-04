@@ -34,9 +34,7 @@ export async function register(data: {
   const loading = showInfoToast("Registrando usuario...", "Por favor espera");
   try {
     const res = await POST(ENDPOINTS.REGISTER, data);
-    if (res.id || res.success) {
-      showSuccessToast("¡Cuenta creada!", "Tu registro se completó exitosamente");
-    }
+    showSuccessToast("¡Cuenta creada!", "Tu registro se completó exitosamente");
     return res;
   } catch (error) {
     throw error;

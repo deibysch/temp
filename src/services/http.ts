@@ -1,3 +1,4 @@
+import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import { showSuccessToast, showErrorToast } from "@/lib/toast-utils"
 
 const defaultHeaders = {
@@ -10,90 +11,59 @@ function getAuthHeaders() {
   return { ...defaultHeaders, Authorization: `Bearer ${token}` }
 }
 
-async function handleResponse(response: Response) {
-  const data = await response.json()
-
-  if (!response.ok) {
-    const errorMessage = data.message || data.detail || data.error || `Error ${response.status}`
-    showErrorToast("Error", errorMessage)
+async function handleResponse<T>(promise: Promise<{ data: T }>) {
+  try {
+    const response = await promise;
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Error desconocido";
+    if (axios.isAxiosError(error)) {
+      const data = error.response?.data;
+      errorMessage = data?.message || data?.detail || data?.error || `Error ${error.response?.status}`;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    showErrorToast("Error", errorMessage);
+    throw error;
   }
-
-  return data
 }
 
 export async function GET(url: string, headers?: object) {
-  try {
-    const res = await fetch(url, {
+  return handleResponse(
+    axios.get(url, {
       headers: { ...getAuthHeaders(), ...headers },
     })
-    return await handleResponse(res)
-  } catch (error) {
-    if (error instanceof Error) {
-      showErrorToast("Error de conexión", error.message)
-    }
-    throw error
-  }
+  );
 }
 
 export async function POST(url: string, data?: any, headers?: object) {
-  try {
-    const res = await fetch(url, {
-      method: "POST",
+  return handleResponse(
+    axios.post(url, data, {
       headers: { ...getAuthHeaders(), ...headers },
-      body: data ? JSON.stringify(data) : undefined,
     })
-    return await handleResponse(res)
-  } catch (error) {
-    if (error instanceof Error) {
-      showErrorToast("Error de conexión", error.message)
-    }
-    throw error
-  }
+  );
 }
 
 export async function PUT(url: string, data?: any, headers?: object) {
-  try {
-    const res = await fetch(url, {
-      method: "PUT",
+  return handleResponse(
+    axios.put(url, data, {
       headers: { ...getAuthHeaders(), ...headers },
-      body: data ? JSON.stringify(data) : undefined,
     })
-    return await handleResponse(res)
-  } catch (error) {
-    if (error instanceof Error) {
-      showErrorToast("Error de conexión", error.message)
-    }
-    throw error
-  }
+  );
 }
 
 export async function PATCH(url: string, data?: any, headers?: object) {
-  try {
-    const res = await fetch(url, {
-      method: "PATCH",
+  return handleResponse(
+    axios.patch(url, data, {
       headers: { ...getAuthHeaders(), ...headers },
-      body: data ? JSON.stringify(data) : undefined,
     })
-    return await handleResponse(res)
-  } catch (error) {
-    if (error instanceof Error) {
-      showErrorToast("Error de conexión", error.message)
-    }
-    throw error
-  }
+  );
 }
 
 export async function DELETE(url: string, headers?: object) {
-  try {
-    const res = await fetch(url, {
-      method: "DELETE",
+  return handleResponse(
+    axios.delete(url, {
       headers: { ...getAuthHeaders(), ...headers },
     })
-    return await handleResponse(res)
-  } catch (error) {
-    if (error instanceof Error) {
-      showErrorToast("Error de conexión", error.message)
-    }
-    throw error
-  }
+  );
 }

@@ -51,9 +51,7 @@ export default function Register() {
         phone_number: formData.phone_number,
         gender: formData.gender,
       })
-      if (res.id || res.success) {
-        navigate("/dashboard")
-      }
+      navigate("/login")
     } catch (err) {
       
     } finally {

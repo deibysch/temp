@@ -34,125 +34,70 @@ import {
   HelpCircle,
   Home,
 } from "lucide-react"
-
-interface Product {
-  id: number
-  name: string
-  price: number
-  category: string
-  stock: number
-  description: string
-  status: "active" | "inactive"
-}
-
-const initialProducts: Product[] = [
-  {
-    id: 1,
-    name: "Smartphone Galaxy",
-    price: 799,
-    category: "Electronics",
-    stock: 20,
-    description: "Latest Android phone",
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Laptop Dell XPS",
-    price: 1299,
-    category: "Electronics",
-    stock: 10,
-    description: "High performance laptop",
-    status: "active",
-  },
-  {
-    id: 3,
-    name: "Adidas Sneakers",
-    price: 95,
-    category: "Fashion",
-    stock: 35,
-    description: "Sport shoes",
-    status: "active",
-  },
-  {
-    id: 4,
-    name: "Blender Pro",
-    price: 149,
-    category: "Home",
-    stock: 25,
-    description: "Professional blender",
-    status: "inactive",
-  },
-  {
-    id: 5,
-    name: "Gaming Mouse",
-    price: 79,
-    category: "Electronics",
-    stock: 60,
-    description: "RGB gaming mouse",
-    status: "active",
-  },
-]
+import { companies as initialCompanies, Company } from "@/data/companies"
 
 export default function Page() {
-  const [products, setProducts] = useState<Product[]>(initialProducts)
+  const [companies, setCompanies] = useState<Company[]>(initialCompanies)
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
-  const [formData, setFormData] = useState<Partial<Product>>({})
+  const [editingCompany, setEditingCompany] = useState<Company | null>(null)
+  const [formData, setFormData] = useState<Partial<Company>>({})
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("products")
+  const [activeSection, setActiveSection] = useState("companies")
 
   const itemsPerPage = 6
 
-  const filteredProducts = useMemo(() => {
-    return products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredCompanies = useMemo(() => {
+    return companies.filter(
+      (company) =>
+        company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        company.address.toLowerCase().includes(searchTerm.toLowerCase()),
     )
-  }, [products, searchTerm])
+  }, [companies, searchTerm])
 
-  const paginatedProducts = useMemo(() => {
+  const paginatedCompanies = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
-    return filteredProducts.slice(startIndex, startIndex + itemsPerPage)
-  }, [filteredProducts, currentPage])
+    return filteredCompanies.slice(startIndex, startIndex + itemsPerPage)
+  }, [filteredCompanies, currentPage])
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
+  const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (editingProduct) {
-      setProducts(products.map((p) => (p.id === editingProduct.id ? { ...editingProduct, ...formData } : p)))
+    if (editingCompany) {
+      setCompanies(companies.map((c) => (c.id === editingCompany.id ? { ...editingCompany, ...formData } as Company : c)))
     } else {
-      const newProduct: Product = {
-        id: Math.max(0, ...products.map((p) => p.id)) + 1,
+      const newCompany: Company = {
+        id: Math.max(0, ...companies.map((c) => c.id)) + 1,
         name: formData.name || "",
-        price: formData.price || 0,
-        category: formData.category || "",
-        stock: formData.stock || 0,
+        photo_url: formData.photo_url || "",
         description: formData.description || "",
-        status: formData.status || "active",
+        address: formData.address || "",
+        latitude: formData.latitude || "",
+        longitude: formData.longitude || "",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       }
-      setProducts([...products, newProduct])
+      setCompanies([...companies, newCompany])
     }
     setIsDialogOpen(false)
-    setEditingProduct(null)
+    setEditingCompany(null)
     setFormData({})
   }
 
-  const handleEdit = (product: Product) => {
-    setEditingProduct(product)
-    setFormData(product)
+  const handleEdit = (company: Company) => {
+    setEditingCompany(company)
+    setFormData(company)
     setIsDialogOpen(true)
   }
 
   const handleDelete = (id: number) => {
-    setProducts(products.filter((p) => p.id !== id))
+    setCompanies(companies.filter((c) => c.id !== id))
   }
 
   const openAddDialog = () => {
-    setEditingProduct(null)
+    setEditingCompany(null)
     setFormData({})
     setIsDialogOpen(true)
   }
@@ -162,18 +107,8 @@ export default function Page() {
       title: "Principal",
       items: [
         { id: "dashboard", icon: Home, label: "Dashboard", badge: null },
-        { id: "products", icon: Package, label: "Productos", badge: products.length.toString() },
-        { id: "analytics", icon: BarChart3, label: "Análisis", badge: null },
+        { id: "companies", icon: Package, label: "Empresas", badge: companies.length.toString() },
         { id: "notifications", icon: Bell, label: "Notificaciones", badge: "3" },
-      ],
-    },
-    {
-      title: "Gestión",
-      items: [
-        { id: "users", icon: Users, label: "Usuarios", badge: null },
-        { id: "favorites", icon: Heart, label: "Favoritos", badge: "12" },
-        { id: "orders", icon: ShoppingCart, label: "Pedidos", badge: "5" },
-        { id: "reports", icon: FileText, label: "Reportes", badge: null },
       ],
     },
     {
@@ -186,7 +121,7 @@ export default function Page() {
   ]
 
   const renderContent = () => {
-    if (activeSection === "products") {
+    if (activeSection === "companies") {
       return (
         <div className="space-y-6">
           {/* Search and Add */}
@@ -194,7 +129,7 @@ export default function Page() {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
-                placeholder="Buscar productos..."
+                placeholder="Buscar empresas..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 border-0 bg-gray-50 dark:bg-gray-800"
@@ -207,12 +142,12 @@ export default function Page() {
                   className="bg-black dark:bg-white dark:text-black text-white hover:bg-gray-800 dark:hover:bg-gray-200"
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Nuevo Producto
+                  Nueva Empresa
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                  <DialogTitle>{editingProduct ? "Editar Producto" : "Nuevo Producto"}</DialogTitle>
+                  <DialogTitle>{editingCompany ? "Editar Empresa" : "Nueva Empresa"}</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
@@ -225,39 +160,11 @@ export default function Page() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="price">Precio</Label>
+                    <Label htmlFor="photo_url">Logo (URL)</Label>
                     <Input
-                      id="price"
-                      type="number"
-                      value={formData.price || ""}
-                      onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="category">Categoría</Label>
-                    <Select
-                      value={formData.category}
-                      onValueChange={(value) => setFormData({ ...formData, category: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar categoría" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Electronics">Electronics</SelectItem>
-                        <SelectItem value="Fashion">Fashion</SelectItem>
-                        <SelectItem value="Home">Home</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="stock">Stock</Label>
-                    <Input
-                      id="stock"
-                      type="number"
-                      value={formData.stock || ""}
-                      onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
-                      required
+                      id="photo_url"
+                      value={formData.photo_url || ""}
+                      onChange={(e) => setFormData({ ...formData, photo_url: e.target.value })}
                     />
                   </div>
                   <div>
@@ -269,22 +176,31 @@ export default function Page() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="status">Estado</Label>
-                    <Select
-                      value={formData.status}
-                      onValueChange={(value: "active" | "inactive") => setFormData({ ...formData, status: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar estado" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="active">Activo</SelectItem>
-                        <SelectItem value="inactive">Inactivo</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label htmlFor="address">Dirección</Label>
+                    <Input
+                      id="address"
+                      value={formData.address || ""}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="latitude">Latitud</Label>
+                    <Input
+                      id="latitude"
+                      value={formData.latitude || ""}
+                      onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="longitude">Longitud</Label>
+                    <Input
+                      id="longitude"
+                      value={formData.longitude || ""}
+                      onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
+                    />
                   </div>
                   <Button type="submit" className="w-full">
-                    {editingProduct ? "Actualizar" : "Crear"}
+                    {editingCompany ? "Actualizar" : "Crear"}
                   </Button>
                 </form>
               </DialogContent>
@@ -297,32 +213,30 @@ export default function Page() {
               <Table>
                 <TableHeader>
                   <TableRow className="border-b">
-                    <TableHead className="font-medium">Producto</TableHead>
-                    <TableHead className="font-medium">Precio</TableHead>
-                    <TableHead className="font-medium">Categoría</TableHead>
-                    <TableHead className="font-medium">Stock</TableHead>
-                    <TableHead className="font-medium">Estado</TableHead>
+                    <TableHead className="font-medium">Logo</TableHead>
+                    <TableHead className="font-medium">Nombre</TableHead>
+                    <TableHead className="font-medium">Dirección</TableHead>
+                    <TableHead className="font-medium">Descripción</TableHead>
                     <TableHead className="font-medium">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedProducts.map((product) => (
-                    <TableRow key={product.id} className="border-b">
-                      <TableCell className="font-medium">{product.name}</TableCell>
-                      <TableCell>${product.price}</TableCell>
-                      <TableCell>{product.category}</TableCell>
-                      <TableCell>{product.stock}</TableCell>
+                  {paginatedCompanies.map((company) => (
+                    <TableRow key={company.id} className="border-b">
                       <TableCell>
-                        <Badge variant={product.status === "active" ? "default" : "secondary"} className="rounded-full">
-                          {product.status === "active" ? "Activo" : "Inactivo"}
-                        </Badge>
+                        {company.photo_url && (
+                          <img src={company.photo_url} alt={company.name} className="h-8 w-8 object-contain rounded" />
+                        )}
                       </TableCell>
+                      <TableCell className="font-medium">{company.name}</TableCell>
+                      <TableCell>{company.address}</TableCell>
+                      <TableCell>{company.description}</TableCell>
                       <TableCell>
                         <div className="flex gap-1">
-                          <Button size="sm" variant="ghost" onClick={() => handleEdit(product)}>
+                          <Button size="sm" variant="ghost" onClick={() => handleEdit(company)}>
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="ghost" onClick={() => handleDelete(product.id)}>
+                          <Button size="sm" variant="ghost" onClick={() => handleDelete(company.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -336,29 +250,27 @@ export default function Page() {
 
           {/* Mobile Cards */}
           <div className="md:hidden space-y-3">
-            {paginatedProducts.map((product) => (
-              <Card key={product.id} className="border-0 shadow-sm bg-gray-50 dark:bg-gray-800">
+            {paginatedCompanies.map((company) => (
+              <Card key={company.id} className="border-0 shadow-sm bg-gray-50 dark:bg-gray-800">
                 <CardContent className="p-4">
                   <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-medium">{product.name}</h3>
-                    <Badge
-                      variant={product.status === "active" ? "default" : "secondary"}
-                      className="rounded-full text-xs"
-                    >
-                      {product.status === "active" ? "Activo" : "Inactivo"}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      {company.photo_url && (
+                        <img src={company.photo_url} alt={company.name} className="h-8 w-8 object-contain rounded" />
+                      )}
+                      <h3 className="font-medium">{company.name}</h3>
+                    </div>
                   </div>
                   <div className="space-y-1 text-sm text-muted-foreground mb-3">
-                    <p>Precio: ${product.price}</p>
-                    <p>Categoría: {product.category}</p>
-                    <p>Stock: {product.stock}</p>
+                    <p>Dirección: {company.address}</p>
+                    <p>{company.description}</p>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => handleEdit(product)} className="flex-1">
+                    <Button size="sm" variant="outline" onClick={() => handleEdit(company)} className="flex-1">
                       <Edit className="h-4 w-4 mr-1" />
                       Editar
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => handleDelete(product.id)} className="flex-1">
+                    <Button size="sm" variant="outline" onClick={() => handleDelete(company.id)} className="flex-1">
                       <Trash2 className="h-4 w-4 mr-1" />
                       Eliminar
                     </Button>
@@ -407,7 +319,7 @@ export default function Page() {
             </h2>
             <p className="text-muted-foreground">
               Esta sección está en desarrollo. Por ahora, la funcionalidad completa está disponible en la sección de
-              Productos.
+              Empresas.
             </p>
           </CardContent>
         </Card>
@@ -424,17 +336,15 @@ export default function Page() {
         } transition-transform lg:translate-x-0 lg:static lg:inset-0`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-              <Package className="h-4 w-4 text-white" />
-            </div>
-            <h2 className="text-lg font-semibold text-emerald-600 dark:text-emerald-400">Ahorra Ya</h2>
+          <div className="flex items-center justify-center flex-shrink-0 w-full">
+            <img
+              src="/images/ahorraya-logo-horizontal.png"
+              alt="AhorraYa Logo"
+              className="w-[150px]"
+            />
           </div>
-          <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(false)}>
-            <X className="h-4 w-4" />
-          </Button>
         </div>
-        
+
         <nav className="p-4 space-y-6">
           {menuSections.map((section) => (
             <div key={section.title}>
@@ -481,11 +391,11 @@ export default function Page() {
         {/* Header */}
         <header className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 sticky top-0 z-10 shadow-sm">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 w-full">
               <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
                 <Menu className="h-4 w-4" />
               </Button>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 text-center w-full">
                 {menuSections.flatMap((section) => section.items).find((item) => item.id === activeSection)?.label ||
                   "Dashboard"}
               </h1>

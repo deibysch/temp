@@ -1,12 +1,22 @@
 import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 
 export function AuthRedirect({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
+  const location = useLocation()
+  
+  // Lista de rutas protegidas
+  const protectedRoutes = ['/dashboard', '/profile', '/settings']
+  
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    const token = localStorage.getItem("token")
+    const isProtectedRoute = protectedRoutes.includes(location.pathname)
+    
+    // Solo redirigir al dashboard si hay token y NO estamos en una ruta protegida
+    if (token && !isProtectedRoute) {
       navigate("/dashboard")
     }
-  }, [navigate])
+  }, [navigate, location.pathname])
+  
   return <>{children}</>
 }

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
@@ -35,6 +35,10 @@ import {
   Home,
 } from "lucide-react"
 import { companies as initialCompanies, Company } from "@/data/companies"
+import { UserAvatar } from '@/components/profile/UserAvatar'
+import { useNavigate } from 'react-router-dom'
+import { userService } from '@/services/userService'
+import { User } from '@/types/user'
 
 export default function Page() {
   const [companies, setCompanies] = useState<Company[]>(initialCompanies)
@@ -45,6 +49,8 @@ export default function Page() {
   const [formData, setFormData] = useState<Partial<Company>>({})
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("companies")
+  const [user, setUser] = useState<User | null>(null)
+  const navigate = useNavigate()
 
   const itemsPerPage = 6
 
@@ -62,6 +68,23 @@ export default function Page() {
   }, [filteredCompanies, currentPage])
 
   const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
+
+  useEffect(() => {
+    loadUserData()
+  }, [])
+
+  const loadUserData = async () => {
+    try {
+      const userData = await userService.getCurrentUser()
+      setUser(userData)
+    } catch (error) {
+      console.error('Error loading user data:', error)
+    }
+  }
+
+  const handleLogout = () => {
+    navigate('/login')
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -389,16 +412,42 @@ export default function Page() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
-        <header className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 sticky top-0 z-10 shadow-sm">
-          <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <div className="flex items-center gap-4 w-full">
-              <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
-                <Menu className="h-4 w-4" />
+        <header className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 sticky top-0 z-50">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="lg:hidden" 
+                onClick={() => setSidebarOpen(true)}
+              >
+                <Menu className="h-5 w-5" />
               </Button>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 text-center w-full">
-                {menuSections.flatMap((section) => section.items).find((item) => item.id === activeSection)?.label ||
-                  "Dashboard"}
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                {menuSections.flatMap((section) => section.items).find((item) => item.id === activeSection)?.label || "Dashboard"}
               </h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-8 h-8 p-0"
+              >
+                <Bell className="h-5 w-5" />
+              </Button>
+              <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
+              <UserAvatar 
+                user={{
+                  name: "Usuario Demo",
+                  email: "demo@ahorraya.com",
+                  avatar_url: "/images/avatar-placeholder.png",
+                  role: "admin"
+                }} 
+                onLogout={() => {
+                  // Implementar lógica de logout
+                  console.log("Logout clicked");
+                }}
+              />
             </div>
           </div>
         </header>

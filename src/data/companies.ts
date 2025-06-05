@@ -58,7 +58,7 @@ export const companies: Company[] = [
   {
     id: 5,
     name: "Infocal Santa Cruz",
-    photo_url: "https://www.infocal.org.bo/wp-content/uploads/2020/10/logo-infocal.png",
+    photo_url: "https://www.upds.edu.bo/wp-content/uploads/2020/10/upds_logo_300.jpg",
     description: "Centro de formación técnica y cursos cortos.",
     address: "Av. Santos Dumont, 4to anillo, Santa Cruz",
     latitude: "-17.800000",
@@ -69,7 +69,7 @@ export const companies: Company[] = [
   {
     id: 6,
     name: "SmartFit Santa Cruz",
-    photo_url: "https://www.smartfit.com.bo/assets/img/logo.png",
+    photo_url: "https://www.upds.edu.bo/wp-content/uploads/2020/10/upds_logo_300.jpg",
     description: "Gimnasio moderno con acceso 24/7 y planes accesibles.",
     address: "Av. Cristo Redentor, 5to anillo, Santa Cruz",
     latitude: "-17.755000",

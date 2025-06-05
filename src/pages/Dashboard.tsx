@@ -38,7 +38,8 @@ import { companies as initialCompanies, Company } from "@/data/companies"
 import { UserAvatar } from '@/components/profile/UserAvatar'
 import { useNavigate } from 'react-router-dom'
 import { userService } from '@/services/userService'
-import { User } from '@/types/user'
+import type { User } from '@/types/user'
+import { toast } from "@/components/ui/use-toast"
 
 export default function Page() {
   const [companies, setCompanies] = useState<Company[]>(initialCompanies)
@@ -79,6 +80,11 @@ export default function Page() {
       setUser(userData)
     } catch (error) {
       console.error('Error loading user data:', error)
+      toast({
+        title: "Error",
+        description: "Failed to load user data",
+        variant: "destructive",
+      })
     }
   }
 
@@ -437,16 +443,13 @@ export default function Page() {
               </Button>
               <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
               <UserAvatar 
-                user={{
-                  name: "Usuario Demo",
-                  email: "demo@ahorraya.com",
+                user={user || {
+                  name: "Loading...",
+                  email: "loading@example.com",
                   avatar_url: "/images/avatar-placeholder.png",
-                  role: "admin"
-                }} 
-                onLogout={() => {
-                  // Implementar lógica de logout
-                  console.log("Logout clicked");
+                  role: "user"
                 }}
+                onLogout={handleLogout}
               />
             </div>
           </div>

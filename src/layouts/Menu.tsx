@@ -22,7 +22,6 @@ const menuSections = [
     items: [
       { id: "dashboard", icon: Home, label: "Dashboard", badge: null },
       { id: "companies", icon: Package, label: "Empresas", badgeKey: "companiesCount" },
-      { id: "notifications", icon: Bell, label: "Notificaciones", badge: "3" },
     ],
   },
   {

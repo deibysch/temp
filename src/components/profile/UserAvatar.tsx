@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { User as UserIcon, Settings, LogOut } from 'lucide-react';
+import { logout } from '@/pages/auth/authApi'
 
 interface UserAvatarProps {
   user: User;
@@ -19,6 +20,17 @@ interface UserAvatarProps {
 export function UserAvatar({ user, onLogout }: UserAvatarProps) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  const handleLogout = async () => {
+    setOpen(false);
+    try {
+      await logout();
+    } catch (e) {
+      // El toast de error ya lo muestra la API
+    }
+    onLogout();
+    navigate('/login');
+  };
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -54,24 +66,21 @@ export function UserAvatar({ user, onLogout }: UserAvatarProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate('/profile')}>
           <UserIcon className="mr-2 h-4 w-4" />
-          <span>View Profile</span>
+          <span>Ver perfil</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate('/settings')}>
           <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
+          <span>Ajustes</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-red-600 focus:text-red-600"
-          onClick={() => {
-            setOpen(false);
-            onLogout();
-          }}
+          onClick={handleLogout}
         >
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <span>Cerrar sesión</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-} 
+}

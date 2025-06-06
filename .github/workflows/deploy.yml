@@ -28,4 +28,5 @@ jobs:
             cd /home/Frontend
             git pull origin main
             docker rm -f frontend-web
+            cd /home/Backend
             docker compose up --build -d frontend-web

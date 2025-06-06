@@ -10,15 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
-
-      - name: Deploy to server
+      - name: Actualizar repositorio del VPS
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ vars.VPS_SSH_HOST }}
@@ -27,6 +19,23 @@ jobs:
           script: |
             cd /home/Frontend
             git pull origin main
-            docker rm -f frontend-web
+
+      - name: Eliminar contenedor antiguo
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ vars.VPS_SSH_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /home/Frontend
+            docker rm -f frontend-web || true
+
+      - name: Construir y ejecutar contenedor
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ vars.VPS_SSH_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
             cd /home/Backend
             docker compose up --build -d frontend-web

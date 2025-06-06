@@ -139,7 +139,7 @@ export default function Page() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
-        <header className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 sticky top-0 z-50">
+        <header className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 sticky top-0">
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
@@ -167,113 +167,142 @@ export default function Page() {
 
         {/* Content */}
         <main className="flex-1 p-4 max-w-7xl mx-auto w-full">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <div className="space-y-6">
             {/* Search and Add */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input placeholder="Buscar empresas..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-gray-50 dark:bg-gray-800" />
-              </div>
-              <CompanyFormDialog
-                open={isDialogOpen}
-                setOpen={setIsDialogOpen}
-                editingCompany={editingCompany}
-                setEditingCompany={setEditingCompany}
-                formData={formData}
-                setFormData={setFormData}
-                onSubmit={handleSubmit}
-                openAddDialog={openAddDialog}
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                placeholder="Buscar empresas..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 border-0 bg-gray-50 dark:bg-gray-800"
               />
             </div>
-
-            {/* Desktop Table */}
-            <Card className="hidden md:block border-0 shadow-none">
-              <CardContent className="p-0">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-b">
-                      <TableHead className="font-medium">Logo</TableHead>
-                      <TableHead className="font-medium">Nombre</TableHead>
-                      <TableHead className="font-medium">Dirección</TableHead>
-                      <TableHead className="font-medium">Descripción</TableHead>
-                      <TableHead className="font-medium">Acciones</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedCompanies.map((company) => (
-                      <TableRow key={company.id} className="border-b">
-                        <TableCell>{company.photo_url && <img src={company.photo_url} alt={company.name} className="h-8 w-8 object-contain rounded" />}</TableCell>
-                        <TableCell className="font-medium">{company.name}</TableCell>
-                        <TableCell>{company.address}</TableCell>
-                        <TableCell>{company.description}</TableCell>
-                        <TableCell>
-                          <div className="flex gap-1">
-                            <Button size="sm" variant="ghost" onClick={() => handleEdit(company)}>
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="ghost" onClick={() => handleDeleteClick(company)}>
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-
-            {/* Mobile Cards */}
-            <div className="md:hidden space-y-3">
-              {paginatedCompanies.map((company) => (
-                <Card key={company.id} className="border-0 shadow-sm bg-gray-50 dark:bg-gray-800">
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="flex items-center gap-2">
-                        {company.photo_url && <img src={company.photo_url} alt={company.name} className="h-8 w-8 object-contain rounded" />}
-                        <h3 className="font-medium">{company.name}</h3>
-                      </div>
-                    </div>
-                    <div className="space-y-1 text-sm text-muted-foreground mb-3">
-                      <p>Dirección: {company.address}</p>
-                      <p>{company.description}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => handleEdit(company)} className="flex-1">
-                        <Edit className="h-4 w-4 mr-1" />
-                        Editar
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDeleteClick(company)} className="flex-1">
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Eliminar
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setCurrentPage(Math.max(1, currentPage - 1))} disabled={currentPage === 1}>
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm text-muted-foreground px-2">
-                  {currentPage} / {totalPages}
-                </span>
-                <Button variant="outline" size="sm" onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages}>
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
-            <CompanyDeleteDialog
-              open={deleteDialogOpen}
-              setOpen={setDeleteDialogOpen}
-              company={companyToDelete}
-              onConfirm={handleConfirmDelete}
+            <CompanyFormDialog
+              open={isDialogOpen}
+              setOpen={setIsDialogOpen}
+              editingCompany={editingCompany}
+              setEditingCompany={setEditingCompany}
+              formData={formData}
+              setFormData={setFormData}
+              onSubmit={handleSubmit}
+              openAddDialog={openAddDialog}
             />
           </div>
+
+          {/* Desktop Table */}
+          <Card className="hidden md:block border-0 shadow-none">
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-b">
+                    <TableHead className="font-medium">Logo</TableHead>
+                    <TableHead className="font-medium">Nombre</TableHead>
+                    <TableHead className="font-medium">Dirección</TableHead>
+                    <TableHead className="font-medium">Descripción</TableHead>
+                    <TableHead className="font-medium">Acciones</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginatedCompanies.map((company) => (
+                    <TableRow key={company.id} className="border-b">
+                      <TableCell>
+                        {company.photo_url && (
+                          <img
+                            src={company.photo_url}
+                            alt={company.name}
+                            className="h-8 w-8 object-contain rounded"
+                          />
+                        )}
+                      </TableCell>
+                      <TableCell className="font-medium">{company.name}</TableCell>
+                      <TableCell>{company.address}</TableCell>
+                      <TableCell>{company.description}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Button size="sm" variant="ghost" onClick={() => handleEdit(company)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => handleDeleteClick(company)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-3">
+            {paginatedCompanies.map((company) => (
+              <Card key={company.id} className="border-0 shadow-sm bg-gray-50 dark:bg-gray-800">
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex items-center gap-2">
+                      {company.photo_url && (
+                        <img
+                          src={company.photo_url}
+                          alt={company.name}
+                          className="h-8 w-8 object-contain rounded"
+                        />
+                      )}
+                      <h3 className="font-medium">{company.name}</h3>
+                    </div>
+                  </div>
+                  <div className="space-y-1 text-sm text-muted-foreground mb-3">
+                    <p>Dirección: {company.address}</p>
+                    <p>{company.description}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => handleEdit(company)} className="flex-1">
+                      <Edit className="h-4 w-4 mr-1" />
+                      Editar
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => handleDeleteClick(company)} className="flex-1">
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Eliminar
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm text-muted-foreground px-2">
+                {currentPage} / {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+          <CompanyDeleteDialog
+            open={deleteDialogOpen}
+            setOpen={setDeleteDialogOpen}
+            company={companyToDelete}
+            onConfirm={handleConfirmDelete}
+          />
+        </div>
         </main>
       </div>
 

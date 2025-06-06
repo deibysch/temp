@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Edit, Trash2, ChevronLeft, ChevronRight, Bell, Menu } from "lucide-react";
-import { Company } from "@/data/companies";
+import { Company } from "@/types/companies";
 import { UserAvatar } from "@/components/profile/UserAvatar";
 import { useNavigate } from "react-router-dom";
 import { userService } from "@/services/userService";

@@ -9,9 +9,7 @@ const MOCK_USER: User = {
   role: "admin",
   phone: "+1234567890",
   location: "Santa Cruz, Bolivia",
-  bio: "Este es un usuario de prueba para desarrollo.",
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
+  bio: "Este es un usuario de prueba para desarrollo."
 };
 
 class UserService {

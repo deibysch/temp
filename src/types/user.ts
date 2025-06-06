@@ -7,8 +7,6 @@ export interface User {
   phone?: string;
   location?: string;
   bio?: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface UserUpdateInput extends Partial<Omit<User, 'id' | 'created_at' | 'updated_at' | 'role'>> {}

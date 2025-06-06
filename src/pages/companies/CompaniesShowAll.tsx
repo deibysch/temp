@@ -1,51 +1,38 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useMemo, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import {
-  Search,
-  Edit,
-  Trash2,
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  Bell,
-  Home,
-  Package,
-  Settings,
-  HelpCircle,
-  Menu,
-} from "lucide-react"
-import { Company } from "@/data/companies"
-import { UserAvatar } from '@/components/profile/UserAvatar'
-import { useNavigate } from 'react-router-dom'
-import { userService } from '@/services/userService'
-import type { User } from '@/types/user'
-import { toast } from "@/components/ui/use-toast"
-import MenuSidebar from "@/layouts/Menu"
-import * as companiesApi from "./companiesApi"
+import type React from "react";
+import { useState, useMemo, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Search, Edit, Trash2, ChevronLeft, ChevronRight, Bell, Menu } from "lucide-react";
+import { Company } from "@/data/companies";
+import { UserAvatar } from "@/components/profile/UserAvatar";
+import { useNavigate } from "react-router-dom";
+import { userService } from "@/services/userService";
+import type { User } from "@/types/user";
+import { toast } from "@/components/ui/use-toast";
+import MenuSidebar from "@/layouts/Menu";
+import * as companiesApi from "./companiesApi";
+import CompanyFormDialog from "./CompanyFormDialog";
+import CompanyDeleteDialog from "./CompanyDeleteDialog";
 
 export default function Page() {
-  const [companies, setCompanies] = useState<Company[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingCompany, setEditingCompany] = useState<Company | null>(null)
-  const [formData, setFormData] = useState<Partial<Company>>({})
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("companies")
-  const [user, setUser] = useState<User | null>(null)
-  const navigate = useNavigate()
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingCompany, setEditingCompany] = useState<Company | null>(null);
+  const [formData, setFormData] = useState<Partial<Company>>({});
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("companies");
+  const [user, setUser] = useState<User | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [companyToDelete, setCompanyToDelete] = useState<Company | null>(null);
+  const navigate = useNavigate();
 
-  const itemsPerPage = 6
+  const itemsPerPage = 6;
 
   const filteredCompanies = useMemo(() => {
     return companies.filter(
@@ -56,88 +43,88 @@ export default function Page() {
   }, [companies, searchTerm])
 
   const paginatedCompanies = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage
-    return filteredCompanies.slice(startIndex, startIndex + itemsPerPage)
-  }, [filteredCompanies, currentPage])
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredCompanies.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredCompanies, currentPage]);
 
-  const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
+  const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage);
 
   useEffect(() => {
-    loadUserData()
-    fetchCompanies()
-  }, [])
+    loadUserData();
+    fetchCompanies();
+  }, []);
 
   const loadUserData = async () => {
     try {
-      const userData = await userService.getCurrentUser()
-      setUser(userData)
+      const userData = await userService.getCurrentUser();
+      setUser(userData);
     } catch (error) {
-      console.error('Error loading user data:', error)
+      console.error("Error loading user data:", error);
       toast({
         title: "Error",
         description: "Failed to load user data",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const fetchCompanies = async () => {
-    try {
-      const data = await companiesApi.getCompanies()
-      setCompanies(data)
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudieron cargar las empresas",
-        variant: "destructive",
-      })
-    }
-  }
+    alert()
+    const data = await companiesApi.getCompanies();
+    setCompanies(data);
+  };
 
   const handleLogout = () => {
-    navigate('/login')
-  }
+    navigate("/login");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       if (editingCompany) {
-        await companiesApi.updateCompany(editingCompany.id, formData)
-        toast({ title: "Actualizado", description: "Empresa actualizada correctamente" })
+        await companiesApi.updateCompany(editingCompany.id, formData);
+        toast({ title: "Actualizado", description: "Empresa actualizada correctamente" });
       } else {
-        await companiesApi.createCompany(formData)
-        toast({ title: "Creado", description: "Empresa creada correctamente" })
+        await companiesApi.createCompany(formData);
+        toast({ title: "Creado", description: "Empresa creada correctamente" });
       }
-      setIsDialogOpen(false)
-      setEditingCompany(null)
-      setFormData({})
-      fetchCompanies()
+      setIsDialogOpen(false);
+      setEditingCompany(null);
+      setFormData({});
+      fetchCompanies();
     } catch (error) {
       // El toast de error ya lo muestra http.ts
     }
-  }
+  };
 
   const handleEdit = (company: Company) => {
-    setEditingCompany(company)
-    setFormData(company)
-    setIsDialogOpen(true)
-  }
+    setEditingCompany(company);
+    setFormData(company);
+    setIsDialogOpen(true);
+  };
 
-  const handleDelete = async (id: number) => {
+  const handleDeleteClick = (company: Company) => {
+    setCompanyToDelete(company);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!companyToDelete) return;
     try {
-      await companiesApi.deleteCompany(id)
-      toast({ title: "Eliminado", description: "Empresa eliminada correctamente" })
-      fetchCompanies()
+      await companiesApi.deleteCompany(companyToDelete.id);
+      fetchCompanies();
     } catch (error) {
-      // El toast de error ya lo muestra http.ts
+    } finally {
+      setDeleteDialogOpen(false);
+      setCompanyToDelete(null);
     }
-  }
+  };
 
   const openAddDialog = () => {
-    setEditingCompany(null)
-    setFormData({})
-    setIsDialogOpen(true)
-  }
+    setEditingCompany(null);
+    setFormData({});
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
@@ -156,24 +143,13 @@ export default function Page() {
         <header className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 sticky top-0 z-50">
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="lg:hidden" 
-                onClick={() => setSidebarOpen(true)}
-              >
+              <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
                 <Menu className="h-5 w-5" />
               </Button>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                {companies.length} Empresas
-              </h1>
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{companies.length} Empresas</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-8 h-8 p-0"
-              >
+              <Button variant="ghost" size="sm" className="w-8 h-8 p-0">
                 <Bell className="h-5 w-5" />
               </Button>
               <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
@@ -197,83 +173,18 @@ export default function Page() {
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  placeholder="Buscar empresas..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-0 bg-gray-50 dark:bg-gray-800"
-                />
+                <Input placeholder="Buscar empresas..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-gray-50 dark:bg-gray-800" />
               </div>
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    onClick={openAddDialog}
-                    className="bg-black dark:bg-white dark:text-black text-white hover:bg-gray-800 dark:hover:bg-gray-200"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Nueva Empresa
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>{editingCompany ? "Editar Empresa" : "Nueva Empresa"}</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <Label htmlFor="name">Nombre</Label>
-                      <Input
-                        id="name"
-                        value={formData.name || ""}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="photo_url">Logo (URL)</Label>
-                      <Input
-                        id="photo_url"
-                        value={formData.photo_url || ""}
-                        onChange={(e) => setFormData({ ...formData, photo_url: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="description">Descripción</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description || ""}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="address">Dirección</Label>
-                      <Input
-                        id="address"
-                        value={formData.address || ""}
-                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="latitude">Latitud</Label>
-                      <Input
-                        id="latitude"
-                        value={formData.latitude || ""}
-                        onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="longitude">Longitud</Label>
-                      <Input
-                        id="longitude"
-                        value={formData.longitude || ""}
-                        onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-                      />
-                    </div>
-                    <Button type="submit" className="w-full">
-                      {editingCompany ? "Actualizar" : "Crear"}
-                    </Button>
-                  </form>
-                </DialogContent>
-              </Dialog>
+              <CompanyFormDialog
+                open={isDialogOpen}
+                setOpen={setIsDialogOpen}
+                editingCompany={editingCompany}
+                setEditingCompany={setEditingCompany}
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleSubmit}
+                openAddDialog={openAddDialog}
+              />
             </div>
 
             {/* Desktop Table */}
@@ -292,11 +203,7 @@ export default function Page() {
                   <TableBody>
                     {paginatedCompanies.map((company) => (
                       <TableRow key={company.id} className="border-b">
-                        <TableCell>
-                          {company.photo_url && (
-                            <img src={company.photo_url} alt={company.name} className="h-8 w-8 object-contain rounded" />
-                          )}
-                        </TableCell>
+                        <TableCell>{company.photo_url && <img src={company.photo_url} alt={company.name} className="h-8 w-8 object-contain rounded" />}</TableCell>
                         <TableCell className="font-medium">{company.name}</TableCell>
                         <TableCell>{company.address}</TableCell>
                         <TableCell>{company.description}</TableCell>
@@ -305,7 +212,7 @@ export default function Page() {
                             <Button size="sm" variant="ghost" onClick={() => handleEdit(company)}>
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => handleDelete(company.id)}>
+                            <Button size="sm" variant="ghost" onClick={() => handleDeleteClick(company)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
@@ -324,9 +231,7 @@ export default function Page() {
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex items-center gap-2">
-                        {company.photo_url && (
-                          <img src={company.photo_url} alt={company.name} className="h-8 w-8 object-contain rounded" />
-                        )}
+                        {company.photo_url && <img src={company.photo_url} alt={company.name} className="h-8 w-8 object-contain rounded" />}
                         <h3 className="font-medium">{company.name}</h3>
                       </div>
                     </div>
@@ -339,7 +244,7 @@ export default function Page() {
                         <Edit className="h-4 w-4 mr-1" />
                         Editar
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDelete(company.id)} className="flex-1">
+                      <Button size="sm" variant="outline" onClick={() => handleDeleteClick(company)} className="flex-1">
                         <Trash2 className="h-4 w-4 mr-1" />
                         Eliminar
                       </Button>
@@ -352,35 +257,29 @@ export default function Page() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
-                >
+                <Button variant="outline" size="sm" onClick={() => setCurrentPage(Math.max(1, currentPage - 1))} disabled={currentPage === 1}>
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
                 <span className="text-sm text-muted-foreground px-2">
                   {currentPage} / {totalPages}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                  disabled={currentPage === totalPages}
-                >
+                <Button variant="outline" size="sm" onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages}>
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
             )}
+            <CompanyDeleteDialog
+              open={deleteDialogOpen}
+              setOpen={setDeleteDialogOpen}
+              company={companyToDelete}
+              onConfirm={handleConfirmDelete}
+            />
           </div>
         </main>
       </div>
 
       {/* Overlay */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
-      )}
+      {sidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />}
     </div>
-  )
+  );
 }

@@ -12,7 +12,7 @@ interface Props {
 
 const CompanyDeleteDialog: React.FC<Props> = ({ open, setOpen, company, onConfirm }) => (
   <Dialog open={open} onOpenChange={setOpen}>
-    <DialogContent className="sm:max-w-md">
+    <DialogContent className="sm:max-w-md w-[calc(100%-2rem)] mx-auto">
       <DialogHeader>
         <DialogTitle>¿Eliminar empresa?</DialogTitle>
       </DialogHeader>

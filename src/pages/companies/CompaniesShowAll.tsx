@@ -69,7 +69,6 @@ export default function Page() {
   };
 
   const fetchCompanies = async () => {
-    alert()
     const data = await companiesApi.getCompanies();
     setCompanies(data);
   };

@@ -13,6 +13,13 @@ interface HeaderProps {
   onLogout: () => void
 }
 
+const STORAGE_VERSION = 'v1';
+
+if (localStorage.getItem('storageVersion') !== STORAGE_VERSION) {
+  localStorage.clear();
+  localStorage.setItem('storageVersion', STORAGE_VERSION);
+}
+
 export default function Header({
   companiesCount,
   user,

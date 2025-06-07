@@ -145,7 +145,9 @@ export default function Page() {
               <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
                 <Menu className="h-5 w-5" />
               </Button>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{companies.length} Empresas</h1>
+              <h1 className="text-xl font-semibold text-green-600 dark:text-green-400">
+                {companies.length} Empresas
+              </h1>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm" className="w-8 h-8 p-0">
@@ -194,21 +196,21 @@ export default function Page() {
             </div>
 
             {/* Desktop Table */}
-            <Card className="hidden md:block border-0 shadow-none">
+            <Card className="hidden md:block border-0 shadow-none overflow-hidden">
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
                     <TableRow className="border-b">
-                      <TableHead className="font-medium">Logo</TableHead>
-                      <TableHead className="font-medium">Nombre</TableHead>
-                      <TableHead className="font-medium">Dirección</TableHead>
-                      <TableHead className="font-medium">Descripción</TableHead>
-                      <TableHead className="font-medium">Acciones</TableHead>
+                      <TableHead className="font-medium text-green-600 dark:text-green-400">Logo</TableHead>
+                      <TableHead className="font-medium text-green-600 dark:text-green-400">Nombre</TableHead>
+                      <TableHead className="font-medium text-green-600 dark:text-green-400">Dirección</TableHead>
+                      <TableHead className="font-medium text-green-600 dark:text-green-400">Descripción</TableHead>
+                      <TableHead className="font-medium text-green-600 dark:text-green-400">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {paginatedCompanies.map((company) => (
-                      <TableRow key={company.id} className="border-b">
+                      <TableRow key={company.id} className="border-b hover:bg-green-50 dark:hover:bg-emerald-900/70 transition-colors">
                         <TableCell>
                           {company.photo_url && (
                             <img
@@ -227,7 +229,7 @@ export default function Page() {
                               size="sm"
                               variant="ghost"
                               onClick={() => handleEdit(company)}
-                              className="text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20"
+                              className="text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
@@ -277,7 +279,7 @@ export default function Page() {
                         size="sm"
                         variant="outline"
                         onClick={() => handleEdit(company)}
-                        className="flex-1 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20"
+                        className="flex-1 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
                       >
                         <Edit className="h-4 w-4 mr-1" />
                         Editar

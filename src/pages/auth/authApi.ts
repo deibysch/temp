@@ -1,4 +1,4 @@
-import { POST } from "@/services/http";
+import { POST, GET, PATCH } from "@/services/http";
 import { ENDPOINTS } from "@/constants/apiClient";
 import { showSuccessToast, showInfoToast } from "@/lib/toast-utils";
 
@@ -8,7 +8,7 @@ export async function login(email: string, password: string) {
     const res = await POST(ENDPOINTS.LOGIN, { email, password });
     if (res.token) {
       localStorage.setItem("token", res.token);
-      localStorage.setItem("user", res.user);
+      localStorage.setItem("user", JSON.stringify(res.user));
       localStorage.setItem("roles", JSON.stringify(res.roles));
       localStorage.setItem("permissions", JSON.stringify(res.permissions));
       showSuccessToast("¡Bienvenido!", "Has iniciado sesión correctamente");
@@ -62,19 +62,6 @@ export async function logout() {
   }
 }
 
-export async function changePassword(current_password: string, new_password: string, new_password_confirmation: string) {
-  const loading = showInfoToast("Cambiando contraseña...", "Por favor espera");
-  try {
-    const res = await POST(ENDPOINTS.CHANGE_PASSWORD, { current_password, new_password, new_password_confirmation });
-    localStorage.removeItem("token");
-    return res;
-  } catch (error) {
-    throw error;
-  } finally {
-    loading.dismiss();
-  }
-}
-
 export async function forgotPassword(email: string) {
   const loading = showInfoToast("Enviando correo...", "Por favor espera");
   try {
@@ -93,6 +80,49 @@ export async function resetPassword(data: { email: string; token: string; passwo
   try {
     const res = await POST(ENDPOINTS.RESET_PASSWORD, data);
     showSuccessToast("Contraseña restablecida", "Tu contraseña ha sido actualizada correctamente");
+    return res;
+  } catch (error) {
+    throw error;
+  } finally {
+    loading.dismiss();
+  }
+}
+
+export async function getProfile() {
+  try {
+    const res = await GET(ENDPOINTS.PROFILE);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateProfile(data: {
+  name: string;
+  pat_surname?: string;
+  mat_surname?: string;
+  ci: number;
+  birthdate?: string;
+  phone_number?: number;
+  gender?: "male" | "female";
+}) {
+  const loading = showInfoToast("Actualizando perfil...", "Por favor espera");
+  try {
+    const res = await PATCH(ENDPOINTS.PROFILE, data);
+    showSuccessToast("Perfil actualizado", "Tus datos han sido actualizados correctamente");
+    return res;
+  } catch (error) {
+    throw error;
+  } finally {
+    loading.dismiss();
+  }
+}
+
+export async function changePassword(current_password: string, new_password: string, new_password_confirmation: string) {
+  const loading = showInfoToast("Cambiando contraseña...", "Por favor espera");
+  try {
+    const res = await POST(ENDPOINTS.CHANGE_PASSWORD, { current_password, new_password, new_password_confirmation });
+    localStorage.removeItem("token");
     return res;
   } catch (error) {
     throw error;

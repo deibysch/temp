@@ -5,7 +5,7 @@ import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import Dashboard from "./pages/companies/CompaniesShowAll";
-import { Profile } from "./components/profile/Profile";
+import { Profile } from "./pages/auth/Profile";
 import { Toaster } from "./components/ui/toaster";
 import { useAuth } from "./hooks/useAuth";
 

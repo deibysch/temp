@@ -17,6 +17,7 @@ import MenuSidebar from "@/layouts/Menu"
 import * as companiesApi from "./companiesApi"
 import CompanyFormDialog from "./CompanyFormDialog"
 import CompanyDeleteDialog from "./CompanyDeleteDialog"
+import Header from "@/components/Header"
 
 export default function Page() {
   const [companies, setCompanies] = useState<Company[]>([])
@@ -139,35 +140,12 @@ export default function Page() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
-        <header className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 sticky top-0">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
-                <Menu className="h-5 w-5" />
-              </Button>
-              <h1 className="text-xl font-semibold text-green-600 dark:text-green-400">
-                {companies.length} Empresas
-              </h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" className="w-8 h-8 p-0">
-                <Bell className="h-5 w-5" />
-              </Button>
-              <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
-              <UserAvatar
-                user={
-                  user || {
-                    name: "Loading...",
-                    email: "loading@example.com",
-                    avatar_url: "/images/avatar-placeholder.png",
-                    role: "user",
-                  }
-                }
-                onLogout={handleLogout}
-              />
-            </div>
-          </div>
-        </header>
+        <Header
+          companiesCount={companies.length}
+          user={user}
+          onSidebarOpen={() => setSidebarOpen(true)}
+          onLogout={handleLogout}
+        />
 
         {/* Content */}
         <main className="flex-1 p-4 max-w-7xl mx-auto w-full">

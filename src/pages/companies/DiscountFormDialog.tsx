@@ -33,12 +33,12 @@ const DiscountFormDialog: React.FC<Props> = ({
           <DialogTitle className="flex items-center gap-2">
             {editingDiscount ? (
               <>
-                <Percent className="h-5 w-5 text-green-600" />
+                <Percent className="h-5 w-5 text-green-600 dark:text-green-400" />
                 Editar Descuento
               </>
             ) : (
               <>
-                <Percent className="h-5 w-5 text-green-600" />
+                <Percent className="h-5 w-5 text-green-600 dark:text-green-400" />
                 Nuevo Descuento
               </>
             )}
@@ -72,7 +72,7 @@ const DiscountFormDialog: React.FC<Props> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="discount-percentage" className="flex items-center gap-1">
-                <Percent className="h-4 w-4" />
+                <Percent className="h-4 w-4 text-green-600 dark:text-green-400" />
                 Porcentaje de descuento
               </Label>
               <Input
@@ -94,7 +94,7 @@ const DiscountFormDialog: React.FC<Props> = ({
             </div>
             <div>
               <Label htmlFor="discount-amount" className="flex items-center gap-1">
-                <DollarSign className="h-4 w-4" />
+                <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
                 Monto fijo de descuento
               </Label>
               <Input
@@ -115,14 +115,14 @@ const DiscountFormDialog: React.FC<Props> = ({
             </div>
           </div>
 
-          <div className="text-xs text-muted-foreground bg-blue-50 dark:bg-blue-950/30 p-2 rounded">
+          <div className="text-xs text-gray-600 dark:text-gray-400 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-2 rounded">
             💡 Puedes usar porcentaje O monto fijo, no ambos al mismo tiempo.
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="valid-from" className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
+                <Calendar className="h-4 w-4 text-green-600 dark:text-green-400" />
                 Válido desde
               </Label>
               <Input
@@ -135,7 +135,7 @@ const DiscountFormDialog: React.FC<Props> = ({
             </div>
             <div>
               <Label htmlFor="valid-until" className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
+                <Calendar className="h-4 w-4 text-green-600 dark:text-green-400" />
                 Válido hasta
               </Label>
               <Input
@@ -160,7 +160,10 @@ const DiscountFormDialog: React.FC<Props> = ({
           </div>
 
           <div className="flex flex-col sm:flex-row gap-2 pt-4">
-            <Button type="submit" className="flex-1">
+            <Button
+              type="submit"
+              className="flex-1 bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600"
+            >
               {editingDiscount ? "Actualizar Descuento" : "Crear Descuento"}
             </Button>
             <Button type="button" variant="outline" onClick={() => setOpen(false)} className="flex-1">

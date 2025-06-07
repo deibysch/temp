@@ -14,6 +14,7 @@ import * as discountsApi from "./discountsApi"
 import type { Discount, DiscountFormData } from "@/types/discount"
 import DiscountFormDialog from "./DiscountFormDialog"
 import DiscountDeleteDialog from "./DiscountDeleteDialog"
+import type { Company } from "@/types/company"
 
 interface Props {
   open: boolean
@@ -159,7 +160,7 @@ const CompanyFormDialog: React.FC<Props> = ({
         <DialogTrigger asChild>
           <Button
             onClick={openAddDialog}
-            className="bg-black dark:bg-white dark:text-black text-white hover:bg-gray-800 dark:hover:bg-gray-200"
+            className="bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600"
           >
             <Plus className="h-4 w-4 mr-2" />
             Nueva Empresa
@@ -226,7 +227,10 @@ const CompanyFormDialog: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600"
+                >
                   {editingCompany ? "Actualizar Empresa" : "Crear Empresa"}
                 </Button>
               </form>
@@ -237,7 +241,13 @@ const CompanyFormDialog: React.FC<Props> = ({
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Descuentos</h3>
                 {editingCompany && (
-                  <Button type="button" variant="outline" size="sm" onClick={handleAddDiscount}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddDiscount}
+                    className="border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20"
+                  >
                     <Plus className="h-4 w-4 mr-1" />
                     Agregar
                   </Button>
@@ -256,27 +266,41 @@ const CompanyFormDialog: React.FC<Props> = ({
                     </div>
                   ) : (
                     discounts.map((discount) => (
-                      <Card key={discount.id} className="p-3">
+                      <Card
+                        key={discount.id}
+                        className="p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                      >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h4 className="font-medium text-sm">{discount.title}</h4>
-                              <Badge variant={discount.is_active ? "default" : "secondary"}>
+                              <h4 className="font-medium text-sm text-gray-900 dark:text-gray-100">{discount.title}</h4>
+                              <Badge
+                                variant={discount.is_active ? "default" : "secondary"}
+                                className={
+                                  discount.is_active
+                                    ? "bg-green-600 dark:bg-green-500 text-white"
+                                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+                                }
+                              >
                                 {discount.is_active ? "Activo" : "Inactivo"}
                               </Badge>
                             </div>
-                            <p className="text-xs text-muted-foreground mb-2">{discount.description}</p>
-                            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">{discount.description}</p>
+                            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-500">
                               <div className="flex items-center gap-1">
                                 {discount.discount_percentage ? (
                                   <>
-                                    <Percent className="h-3 w-3" />
-                                    <span>{discount.discount_percentage}% OFF</span>
+                                    <Percent className="h-3 w-3 text-green-600 dark:text-green-400" />
+                                    <span className="text-green-600 dark:text-green-400 font-medium">
+                                      {discount.discount_percentage}% OFF
+                                    </span>
                                   </>
                                 ) : (
                                   <>
-                                    <DollarSign className="h-3 w-3" />
-                                    <span>${discount.discount_amount} OFF</span>
+                                    <DollarSign className="h-3 w-3 text-green-600 dark:text-green-400" />
+                                    <span className="text-green-600 dark:text-green-400 font-medium">
+                                      ${discount.discount_amount} OFF
+                                    </span>
                                   </>
                                 )}
                               </div>
@@ -293,7 +317,11 @@ const CompanyFormDialog: React.FC<Props> = ({
                               size="sm"
                               variant="ghost"
                               onClick={() => handleToggleDiscountStatus(discount.id, discount.is_active)}
-                              className="h-6 w-6 p-0"
+                              className={`h-6 w-6 p-0 ${
+                                discount.is_active
+                                  ? "text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                                  : "text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20"
+                              }`}
                             >
                               {discount.is_active ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
                             </Button>
@@ -301,7 +329,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                               size="sm"
                               variant="ghost"
                               onClick={() => handleEditDiscount(discount)}
-                              className="h-6 w-6 p-0"
+                              className="h-6 w-6 p-0 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                             >
                               <Edit className="h-3 w-3" />
                             </Button>
@@ -309,7 +337,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                               size="sm"
                               variant="ghost"
                               onClick={() => handleDeleteClick(discount)}
-                              className="h-6 w-6 p-0"
+                              className="h-6 w-6 p-0 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>

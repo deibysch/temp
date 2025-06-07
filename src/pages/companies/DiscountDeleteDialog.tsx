@@ -40,7 +40,14 @@ const DiscountDeleteDialog: React.FC<Props> = ({ open, setOpen, discount, onConf
               <div className="bg-white dark:bg-gray-800 p-3 rounded border">
                 <div className="flex items-start justify-between mb-2">
                   <h4 className="font-medium text-sm">{discount.title}</h4>
-                  <Badge variant={discount.is_active ? "default" : "secondary"}>
+                  <Badge
+                    variant={discount.is_active ? "default" : "secondary"}
+                    className={
+                      discount.is_active
+                        ? "bg-green-600 dark:bg-green-500 text-white"
+                        : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+                    }
+                  >
                     {discount.is_active ? "Activo" : "Inactivo"}
                   </Badge>
                 </div>
@@ -51,13 +58,17 @@ const DiscountDeleteDialog: React.FC<Props> = ({ open, setOpen, discount, onConf
                   <div className="flex items-center gap-1">
                     {discount.discount_percentage ? (
                       <>
-                        <Percent className="h-3 w-3" />
-                        <span className="font-medium text-green-600">{discount.discount_percentage}% OFF</span>
+                        <Percent className="h-3 w-3 text-green-600 dark:text-green-400" />
+                        <span className="font-medium text-green-600 dark:text-green-400">
+                          {discount.discount_percentage}% OFF
+                        </span>
                       </>
                     ) : (
                       <>
-                        <DollarSign className="h-3 w-3" />
-                        <span className="font-medium text-green-600">${discount.discount_amount} OFF</span>
+                        <DollarSign className="h-3 w-3 text-green-600 dark:text-green-400" />
+                        <span className="font-medium text-green-600 dark:text-green-400">
+                          ${discount.discount_amount} OFF
+                        </span>
                       </>
                     )}
                   </div>

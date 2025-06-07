@@ -1,53 +1,52 @@
-import { Routes, Route } from "react-router-dom"
-import Home from "./pages/Home"
-import Login from "./pages/auth/Login"
-import Register from "./pages/auth/Register"
-import ForgotPassword from "./pages/auth/ForgotPassword"
-import ResetPassword from "./pages/auth/ResetPassword"
-import Dashboard from "./pages/companies/CompaniesShowAll"
-import { Profile } from "./components/profile/Profile"
-import { AuthRedirect } from "./components/AuthRedirect"
-import { Toaster } from "./components/ui/toaster"
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import Dashboard from "./pages/companies/CompaniesShowAll";
+import { Profile } from "./components/profile/Profile";
+import { Toaster } from "./components/ui/toaster";
+import { useAuth } from "./hooks/useAuth";
+
+function ProtectedRoute({ role, redirectPath = "/login" }: { role: string, redirectPath?: string }) {
+  const { hasAnyRole } = useAuth();
+  if (!hasAnyRole(role)) {
+    return <Navigate to={redirectPath} replace />;
+  }
+  return <Outlet />;
+}
+
+function AuthRedirect() {
+  const { getRedirectPathForRole } = useAuth();
+  const path = getRedirectPathForRole();
+  if (path!=""){
+    return <Navigate to={getRedirectPathForRole()} replace />;
+  }
+  else{
+    return <Outlet />;
+  }
+}
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={
-          <AuthRedirect>
-            <Login />
-          </AuthRedirect>
-        } />
-        <Route path="/register" element={
-          <AuthRedirect>
-            <Register />
-          </AuthRedirect>
-        } />
-        <Route path="/forgot-password" element={
-          <AuthRedirect>
-            <ForgotPassword />
-          </AuthRedirect>
-        } />
-        <Route path="/reset-password" element={
-          <AuthRedirect>
-            <ResetPassword />
-          </AuthRedirect>
-        } />
-        <Route path="/dashboard" element={
-          <AuthRedirect>
-            <Dashboard />
-          </AuthRedirect>
-        } />
-        <Route path="/profile" element={
-          <AuthRedirect>
-            <Profile />
-          </AuthRedirect>
-        } />
+        <Route element={<AuthRedirect />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Route>
+        <Route element={<ProtectedRoute role="su" redirectPath="/login" />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
       </Routes>
       <Toaster />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

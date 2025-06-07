@@ -8,6 +8,9 @@ export async function login(email: string, password: string) {
     const res = await POST(ENDPOINTS.LOGIN, { email, password });
     if (res.token) {
       localStorage.setItem("token", res.token);
+      localStorage.setItem("user", res.user);
+      localStorage.setItem("roles", JSON.stringify(res.roles));
+      localStorage.setItem("permissions", JSON.stringify(res.permissions));
       showSuccessToast("¡Bienvenido!", "Has iniciado sesión correctamente");
     }
     return res;
@@ -17,7 +20,6 @@ export async function login(email: string, password: string) {
     loading.dismiss();
   }
 }
-
 
 export async function register(data: {
   email: string;
@@ -48,6 +50,9 @@ export async function logout() {
   try {
     const res = await POST(ENDPOINTS.LOGOUT, {});
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("roles");
+    localStorage.removeItem("permissions");
     showSuccessToast("Sesión cerrada", "Has cerrado sesión correctamente");
     return res;
   } catch (error) {

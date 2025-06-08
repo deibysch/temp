@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosError } from "axios";
-import { showSuccessToast, showErrorToast } from "@/lib/toast-utils"
+import axios from "axios";
+import { showErrorToast } from "@/lib/toast-utils"
 
 const defaultHeaders = {
   "Accept": "application/json",
@@ -18,13 +18,18 @@ async function handleResponse<T>(promise: Promise<{ data: T }>) {
   } catch (error) {
     let errorMessage = "Error desconocido";
     if (axios.isAxiosError(error)) {
-      const data = error.response?.data;
-      errorMessage = data?.message || data?.detail || data?.error || `Error ${error.response?.status}`;
-      if (error.response?.status === 401) {
-        localStorage.clear();
-        if (window.location.pathname != "/login") {
-          window.location.href = "/login";
-          return;
+      if( error.code === "ERR_NETWORK") {
+        errorMessage = "No se pudo conectar al servidor. Por favor, verifica tu conexión a Internet.";
+      }
+      else {
+        const data = error.response?.data;
+        errorMessage = data?.message || data?.detail || data?.error || `Error ${error.response?.status}`;
+        if (error.response?.status === 401) {
+          localStorage.clear();
+          if (window.location.pathname != "/login") {
+            window.location.href = "/login";
+            return;
+          }
         }
       }
     } else if (error instanceof Error) {

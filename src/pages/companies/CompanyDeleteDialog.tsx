@@ -1,5 +1,5 @@
 import React from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import type { Company } from "@/data/companies"
 
@@ -12,9 +12,12 @@ interface Props {
 
 const CompanyDeleteDialog: React.FC<Props> = ({ open, setOpen, company, onConfirm }) => (
   <Dialog open={open} onOpenChange={setOpen}>
-    <DialogContent className="sm:max-w-md w-[calc(100%-2rem)] mx-auto">
+    <DialogContent className="sm:max-w-md w-[calc(100%-2rem)] mx-auto" aria-describedby={undefined}>
       <DialogHeader>
         <DialogTitle>¿Eliminar empresa?</DialogTitle>
+        <DialogDescription>
+          Esta acción no se puede deshacer.
+        </DialogDescription>
       </DialogHeader>
       <div className="py-2">
         <p>

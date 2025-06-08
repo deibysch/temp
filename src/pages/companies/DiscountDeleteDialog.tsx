@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, Percent, DollarSign, Calendar } from "lucide-react"
@@ -27,6 +27,7 @@ const DiscountDeleteDialog: React.FC<Props> = ({ open, setOpen, discount, onConf
             <AlertTriangle className="h-5 w-5" />
             ¿Eliminar descuento?
           </DialogTitle>
+          <DialogDescription>Esta acción eliminará permanentemente el descuento seleccionado.</DialogDescription>
         </DialogHeader>
 
         {discount && (

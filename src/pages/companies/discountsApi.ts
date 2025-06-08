@@ -3,16 +3,8 @@ import { ENDPOINTS } from "@/constants/apiClient"
 import { showSuccessToast, showInfoToast } from "@/lib/toast-utils"
 import type { Discount, DiscountFormData } from "@/types/discount"
 
-export async function getDiscounts() {
-  return GET(ENDPOINTS.DISCOUNTS)
-}
-
 export async function getDiscountsByCompany(companyId: number | string): Promise<Discount[]> {
   return GET(`${ENDPOINTS.DISCOUNTS}?company_id=${companyId}`)
-}
-
-export async function getDiscount(id: number | string): Promise<Discount> {
-  return GET(`${ENDPOINTS.DISCOUNTS}/${id}`)
 }
 
 export async function createDiscount(data: DiscountFormData) {

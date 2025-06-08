@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
@@ -169,6 +169,11 @@ const CompanyFormDialog: React.FC<Props> = ({
         <DialogContent className="sm:max-w-4xl w-[calc(100%-2rem)] m-auto max-h-[calc(100%-2rem)] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingCompany ? "Editar Empresa" : "Nueva Empresa"}</DialogTitle>
+            <DialogDescription>
+              {editingCompany
+                ? "Modifica los datos de la empresa"
+                : "Completa el formulario para crear una nueva empresa"}
+            </DialogDescription>
           </DialogHeader>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

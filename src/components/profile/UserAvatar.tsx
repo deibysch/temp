@@ -51,7 +51,7 @@ export function UserAvatar({ user, onLogout }: UserAvatarProps) {
           aria-label="User menu"
         >
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user.url_picture || "/placeholder.svg"} alt={user.name} />
+            <AvatarImage src={user.url_thumbnail || "/placeholder.svg"} alt={user.name} />
             <AvatarFallback>{user.name?.charAt(0) || "U"}</AvatarFallback>
           </Avatar>
         </button>

@@ -31,44 +31,8 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select"
-
-interface User {
-  id: number
-  email: string
-  email_verified_at: string | null
-  name: string
-  pat_surname: string
-  mat_surname: string
-  fullname: string
-  ci: number
-  birthdate: string
-  phone_number: number
-  gender: string
-  url_picture: string | null
-  url_thumbnail: string | null
-}
-
-interface UserData {
-  user: User
-  roles: string[]
-  permissions: string[]
-}
-
-interface UserUpdateInput {
-  name?: string
-  pat_surname?: string
-  mat_surname?: string
-  ci?: number
-  birthdate?: string
-  phone_number?: number
-  gender?: string
-}
-
-interface PasswordChangeInput {
-  current_password: string
-  new_password: string
-  confirm_password: string
-}
+import { updateProfile, changePassword, getProfile } from "./authApi"
+import { User, UserUpdateInput } from "@/types/user"
 
 export function Profile() {
   const [userData, setUserData] = useState<UserData | null>(null)
@@ -94,43 +58,27 @@ export function Profile() {
 
   const loadUserData = async () => {
     try {
-      // Simulando la carga de datos del usuario
-      const mockUserData: UserData = {
-        user: {
-          id: 1,
-          email: "su@gmail.com",
-          email_verified_at: null,
-          name: "Super Usuario",
-          pat_surname: "de Ahorra",
-          mat_surname: "Ya",
-          fullname: "Super Usuario de Ahorra Ya",
-          ci: 11111111,
-          birthdate: "2000-01-01",
-          phone_number: 77000000,
-          gender: "male",
-          url_picture: null,
-          url_thumbnail: null,
-        },
-        roles: ["su"],
-        permissions: ["manage users", "edit articles", "delete articles", "view reports"],
+      const res = await getProfile()
+      if (!res || !res.user) throw new Error("No se encontraron datos de usuario")
+
+      const userDataFromApi: UserData = {
+        user: res.user,
+        roles: res.roles || [],
+        permissions: res.permissions || [],
       }
 
-      setUserData(mockUserData)
+      setUserData(userDataFromApi)
       setFormData({
-        name: mockUserData.user.name,
-        pat_surname: mockUserData.user.pat_surname,
-        mat_surname: mockUserData.user.mat_surname,
-        ci: mockUserData.user.ci,
-        birthdate: mockUserData.user.birthdate,
-        phone_number: mockUserData.user.phone_number,
-        gender: mockUserData.user.gender,
+        name: userDataFromApi.user.name,
+        pat_surname: userDataFromApi.user.pat_surname,
+        mat_surname: userDataFromApi.user.mat_surname,
+        ci: userDataFromApi.user.ci,
+        birthdate: userDataFromApi.user.birthdate,
+        phone_number: userDataFromApi.user.phone_number,
+        gender: userDataFromApi.user.gender,
       })
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to load user data",
-        variant: "destructive",
-      })
+      // No mostrar toast aquí, ya que el loading cubre el error
     } finally {
       setLoading(false)
     }
@@ -141,36 +89,36 @@ export function Profile() {
 
     // Validar name (requerido, máximo 50 caracteres)
     if (!formData.name || formData.name.trim() === "") {
-      newErrors.name = "Name is required"
+      newErrors.name = "El nombre es obligatorio"
     } else if (formData.name.length > 50) {
-      newErrors.name = "Name must not exceed 50 characters"
+      newErrors.name = "El nombre no debe exceder 50 caracteres"
     }
 
     // Validar pat_surname (opcional, máximo 50 caracteres)
     if (formData.pat_surname && formData.pat_surname.length > 50) {
-      newErrors.pat_surname = "Paternal surname must not exceed 50 characters"
+      newErrors.pat_surname = "El apellido paterno no debe exceder 50 caracteres"
     }
 
     // Validar mat_surname (opcional, máximo 50 caracteres)
     if (formData.mat_surname && formData.mat_surname.length > 50) {
-      newErrors.mat_surname = "Maternal surname must not exceed 50 characters"
+      newErrors.mat_surname = "El apellido materno no debe exceder 50 caracteres"
     }
 
     // Validar CI (requerido, numérico)
     if (!formData.ci) {
-      newErrors.ci = "CI is required"
+      newErrors.ci = "El CI es obligatorio"
     } else if (isNaN(Number(formData.ci))) {
-      newErrors.ci = "CI must be a valid number"
+      newErrors.ci = "El CI debe ser un número válido"
     }
 
     // Validar phone_number (opcional, numérico)
     if (formData.phone_number && isNaN(Number(formData.phone_number))) {
-      newErrors.phone_number = "Phone number must be a valid number"
+      newErrors.phone_number = "El celular debe ser un número válido"
     }
 
     // Validar gender (opcional, male/female)
     if (formData.gender && !["male", "female"].includes(formData.gender)) {
-      newErrors.gender = "Gender must be either male or female"
+      newErrors.gender = "El género debe ser masculino o femenino"
     }
 
     setErrors(newErrors)
@@ -218,8 +166,8 @@ export function Profile() {
 
     if (!validateForm()) {
       toast({
-        title: "Validation Error",
-        description: "Please fix the errors in the form",
+        title: "Error de validación",
+        description: "Por favor corrige los errores en el formulario",
         variant: "destructive",
       })
       return
@@ -227,17 +175,18 @@ export function Profile() {
 
     try {
       setSaving(true)
-      // Aquí iría la lógica para actualizar el perfil
-      toast({
-        title: "Success",
-        description: "Profile updated successfully",
+      await updateProfile({
+        name: formData.name!,
+        pat_surname: formData.pat_surname,
+        mat_surname: formData.mat_surname,
+        ci: Number(formData.ci),
+        birthdate: formData.birthdate,
+        phone_number: formData.phone_number ? Number(formData.phone_number) : undefined,
+        gender: formData.gender as "male" | "female" | undefined,
       })
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update profile",
-        variant: "destructive",
-      })
+      await loadUserData()
+    } catch (error: any) {
+      
     } finally {
       setSaving(false)
     }
@@ -249,7 +198,7 @@ export function Profile() {
     if (passwordData.new_password !== passwordData.confirm_password) {
       toast({
         title: "Error",
-        description: "New passwords do not match",
+        description: "Las nuevas contraseñas no coinciden",
         variant: "destructive",
       })
       return
@@ -257,16 +206,21 @@ export function Profile() {
 
     try {
       setSaving(true)
-      // Aquí iría la lógica para cambiar la contraseña
+      await changePassword(
+        passwordData.current_password,
+        passwordData.new_password,
+        passwordData.confirm_password
+      )
       toast({
-        title: "Success",
-        description: "Password changed successfully",
+        title: "Éxito",
+        description: "Contraseña cambiada correctamente",
       })
       setPasswordData({ current_password: "", new_password: "", confirm_password: "" })
-    } catch (error) {
+      navigate("/login")
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Failed to change password",
+        description: "No se pudo cambiar la contraseña",
         variant: "destructive",
       })
     } finally {
@@ -279,15 +233,11 @@ export function Profile() {
       setSaving(true)
       // Aquí iría la lógica para enviar email de verificación
       toast({
-        title: "Success",
-        description: "Verification email sent successfully",
+        title: "Éxito",
+        description: "Correo de verificación enviado correctamente",
       })
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send verification email",
-        variant: "destructive",
-      })
+      
     } finally {
       setSaving(false)
     }
@@ -298,7 +248,7 @@ export function Profile() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center space-y-4">
           <Loader2 className="h-12 w-12 animate-spin mx-auto text-blue-600" />
-          <p className="text-gray-600">Loading your profile...</p>
+          <p className="text-gray-600">Cargando tu perfil...</p>
         </div>
       </div>
     )
@@ -650,6 +600,9 @@ export function Profile() {
                         {showPassword.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
+                    {passwordData.new_password && passwordData.confirm_password && passwordData.new_password !== passwordData.confirm_password && (
+                      <p className="text-sm text-red-500">Las nuevas contraseñas no coinciden</p>
+                    )}
                   </div>
 
                   <Button

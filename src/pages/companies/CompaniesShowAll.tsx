@@ -8,10 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Search, Edit, Trash2, ChevronLeft, ChevronRight, Bell, Menu } from "lucide-react"
 import type { Company } from "@/types/companies"
-import { UserAvatar } from "@/components/profile/UserAvatar"
 import { useNavigate } from "react-router-dom"
-import { userService } from "@/services/userService"
-import type { User } from "@/types/user"
 import { toast } from "@/components/ui/use-toast"
 import MenuSidebar from "@/layouts/Menu"
 import * as companiesApi from "./companiesApi"
@@ -28,7 +25,6 @@ export default function Page() {
   const [formData, setFormData] = useState<Partial<Company>>({})
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("companies")
-  const [user, setUser] = useState<User | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [companyToDelete, setCompanyToDelete] = useState<Company | null>(null)
   const navigate = useNavigate()
@@ -51,23 +47,8 @@ export default function Page() {
   const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
 
   useEffect(() => {
-    loadUserData()
     fetchCompanies()
   }, [])
-
-  const loadUserData = async () => {
-    try {
-      const userData = await userService.getCurrentUser()
-      setUser(userData)
-    } catch (error) {
-      console.error("Error loading user data:", error)
-      toast({
-        title: "Error",
-        description: "Failed to load user data",
-        variant: "destructive",
-      })
-    }
-  }
 
   const fetchCompanies = async () => {
     const data = await companiesApi.getCompanies()
@@ -142,7 +123,6 @@ export default function Page() {
         {/* Header */}
         <Header
           companiesCount={companies.length}
-          user={user}
           onSidebarOpen={() => setSidebarOpen(true)}
           onLogout={handleLogout}
         />

@@ -1,14 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Bell, Menu } from "lucide-react"
 import { UserAvatar } from "@/components/profile/UserAvatar"
-import type { User } from "@/types/user"
 import { useMemo } from "react"
 import { Navigate } from "react-router-dom"
 import Login from "../pages/auth/Login"
 
 interface HeaderProps {
   companiesCount: number
-  user: User | null
   onSidebarOpen: () => void
   onLogout: () => void
 }
@@ -22,7 +20,6 @@ if (localStorage.getItem('storageVersion') !== STORAGE_VERSION) {
 
 export default function Header({
   companiesCount,
-  user,
   onSidebarOpen,
   onLogout,
 }: HeaderProps) {

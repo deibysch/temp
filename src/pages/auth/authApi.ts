@@ -91,6 +91,11 @@ export async function resetPassword(data: { email: string; token: string; passwo
 export async function getProfile() {
   try {
     const res = await GET(ENDPOINTS.PROFILE);
+    if (res && res.user) {
+      localStorage.setItem("user", JSON.stringify(res.user));
+      localStorage.setItem("roles", JSON.stringify(res.roles || []));
+      localStorage.setItem("permissions", JSON.stringify(res.permissions || []));
+    }
     return res;
   } catch (error) {
     throw error;
@@ -122,7 +127,8 @@ export async function changePassword(current_password: string, new_password: str
   const loading = showInfoToast("Cambiando contraseña...", "Por favor espera");
   try {
     const res = await POST(ENDPOINTS.CHANGE_PASSWORD, { current_password, new_password, new_password_confirmation });
-    localStorage.removeItem("token");
+    localStorage.clear();
+    showSuccessToast("Contraseña cambiada", "Tu contraseña ha sido cambiada correctamente");
     return res;
   } catch (error) {
     throw error;

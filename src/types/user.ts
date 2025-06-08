@@ -1,20 +1,25 @@
 export interface User {
-  id: string;
-  name: string;
+  id: number;
   email: string;
-  avatar_url?: string;
-  role: 'admin' | 'user';
-  phone?: string;
-  location?: string;
-  bio?: string;
+  email_verified_at: string | null;
+  name: string;
+  pat_surname: string;
+  mat_surname: string;
+  fullname: string;
+  ci: number;
+  birthdate: string;
+  phone_number: number;
+  gender: string;
+  url_picture: string | null;
+  url_thumbnail: string | null;
 }
 
-export interface UserUpdateInput extends Partial<Omit<User, 'id' | 'created_at' | 'updated_at' | 'role'>> {}
-
-export interface UserProfile extends User {
-  settings: {
-    notifications: boolean;
-    theme: 'light' | 'dark' | 'system';
-    language: string;
-  }
-} 
+export interface UserUpdateInput {
+  name?: string;
+  pat_surname?: string;
+  mat_surname?: string;
+  ci?: number;
+  birthdate?: string;
+  phone_number?: number;
+  gender?: string;
+}

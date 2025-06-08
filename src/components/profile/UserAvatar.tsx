@@ -26,7 +26,7 @@ export function UserAvatar({ user, onLogout }: UserAvatarProps) {
     try {
       await logout();
     } catch (e) {
-      // El toast de error ya lo muestra la API
+      
     }
     onLogout();
     navigate('/login');
@@ -51,8 +51,8 @@ export function UserAvatar({ user, onLogout }: UserAvatarProps) {
           aria-label="User menu"
         >
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user.avatar_url} alt={user.name} />
-            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+            <AvatarImage src={user.url_picture || "/placeholder.svg"} alt={user.name} />
+            <AvatarFallback>{user.name?.charAt(0) || "U"}</AvatarFallback>
           </Avatar>
         </button>
       </DropdownMenuTrigger>

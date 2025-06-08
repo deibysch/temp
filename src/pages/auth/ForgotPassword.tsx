@@ -20,9 +20,7 @@ export default function ForgotPassword() {
     try {
       await forgotPassword(email)
       setIsSent(true)
-    } catch (e) {
-      
-    }
+    } catch (e) {}
     setIsSending(false)
   }
 
@@ -64,6 +62,7 @@ export default function ForgotPassword() {
               required
               disabled={isSending || isSent}
               className="h-12"
+              autoComplete="email"
             />
           </div>
 

@@ -59,6 +59,7 @@ const DiscountFormDialog: React.FC<Props> = ({
               onChange={(e) => setDiscountFormData({ ...discountFormData, title: e.target.value })}
               placeholder="Ej: 20% OFF en todos los productos"
               required
+              autoComplete="off"
             />
           </div>
 
@@ -71,6 +72,7 @@ const DiscountFormDialog: React.FC<Props> = ({
               placeholder="Describe los detalles del descuento..."
               required
               className="min-h-[80px]"
+              autoComplete="off"
             />
           </div>
 
@@ -95,6 +97,7 @@ const DiscountFormDialog: React.FC<Props> = ({
                   })
                 }
                 placeholder="0"
+                autoComplete="off"
               />
             </div>
             <div>
@@ -116,6 +119,7 @@ const DiscountFormDialog: React.FC<Props> = ({
                   })
                 }
                 placeholder="0.00"
+                autoComplete="off"
               />
             </div>
           </div>
@@ -136,6 +140,7 @@ const DiscountFormDialog: React.FC<Props> = ({
                 value={discountFormData.valid_from || ""}
                 onChange={(e) => setDiscountFormData({ ...discountFormData, valid_from: e.target.value })}
                 required
+                autoComplete="off"
               />
             </div>
             <div>
@@ -149,6 +154,7 @@ const DiscountFormDialog: React.FC<Props> = ({
                 value={discountFormData.valid_until || ""}
                 onChange={(e) => setDiscountFormData({ ...discountFormData, valid_until: e.target.value })}
                 required
+                autoComplete="off"
               />
             </div>
           </div>
@@ -161,6 +167,7 @@ const DiscountFormDialog: React.FC<Props> = ({
               onChange={(e) => setDiscountFormData({ ...discountFormData, terms_and_conditions: e.target.value })}
               placeholder="Términos y condiciones del descuento (opcional)..."
               className="min-h-[80px]"
+              autoComplete="off"
             />
           </div>
 

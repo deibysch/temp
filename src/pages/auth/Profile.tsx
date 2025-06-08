@@ -24,15 +24,21 @@ import {
 } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 import { useNavigate } from "react-router-dom"
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 import { updateProfile, changePassword, getProfile } from "./authApi"
-import { User, UserUpdateInput } from "@/types/user"
+import type { User, UserUpdateInput } from "@/types/user"
+
+interface UserData {
+  user: User
+  roles: string[]
+  permissions: string[]
+}
+
+interface PasswordChangeInput {
+  current_password: string
+  new_password: string
+  confirm_password: string
+}
 
 export function Profile() {
   const [userData, setUserData] = useState<UserData | null>(null)
@@ -186,7 +192,6 @@ export function Profile() {
       })
       await loadUserData()
     } catch (error: any) {
-      
     } finally {
       setSaving(false)
     }
@@ -206,11 +211,7 @@ export function Profile() {
 
     try {
       setSaving(true)
-      await changePassword(
-        passwordData.current_password,
-        passwordData.new_password,
-        passwordData.confirm_password
-      )
+      await changePassword(passwordData.current_password, passwordData.new_password, passwordData.confirm_password)
       toast({
         title: "Éxito",
         description: "Contraseña cambiada correctamente",
@@ -237,7 +238,6 @@ export function Profile() {
         description: "Correo de verificación enviado correctamente",
       })
     } catch (error) {
-      
     } finally {
       setSaving(false)
     }
@@ -352,7 +352,7 @@ export function Profile() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nombre *</Label>
+                  <Label htmlFor="name">Nombres *</Label>
                   <Input
                     id="name"
                     name="name"
@@ -361,6 +361,7 @@ export function Profile() {
                     disabled={saving}
                     maxLength={50}
                     className={errors.name ? "border-red-500" : ""}
+                    autoComplete="given-name"
                   />
                   {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
                 </div>
@@ -376,6 +377,7 @@ export function Profile() {
                       disabled={saving}
                       maxLength={50}
                       className={errors.pat_surname ? "border-red-500" : ""}
+                      autoComplete="additional-name"
                     />
                     {errors.pat_surname && <p className="text-sm text-red-500">{errors.pat_surname}</p>}
                   </div>
@@ -389,6 +391,7 @@ export function Profile() {
                       disabled={saving}
                       maxLength={50}
                       className={errors.mat_surname ? "border-red-500" : ""}
+                      autoComplete="family-name"
                     />
                     {errors.mat_surname && <p className="text-sm text-red-500">{errors.mat_surname}</p>}
                   </div>
@@ -404,6 +407,7 @@ export function Profile() {
                     onChange={handleInputChange}
                     disabled={saving}
                     className={errors.ci ? "border-red-500" : ""}
+                    autoComplete="off"
                   />
                   {errors.ci && <p className="text-sm text-red-500">{errors.ci}</p>}
                 </div>
@@ -417,6 +421,7 @@ export function Profile() {
                     value={formData.birthdate || ""}
                     onChange={handleInputChange}
                     disabled={saving}
+                    autoComplete="bday"
                   />
                 </div>
 
@@ -430,6 +435,7 @@ export function Profile() {
                     onChange={handleInputChange}
                     disabled={saving}
                     className={errors.phone_number ? "border-red-500" : ""}
+                    autoComplete="tel"
                   />
                   {errors.phone_number && <p className="text-sm text-red-500">{errors.phone_number}</p>}
                 </div>
@@ -440,8 +446,10 @@ export function Profile() {
                     value={formData.gender || undefined}
                     onValueChange={(value: string) => setFormData((prev: UserUpdateInput) => ({ ...prev, gender: value }))}
                     disabled={saving}
+                    name="gender"
+                    id="gender"
                   >
-                    <SelectTrigger id="gender" name="gender">
+                    <SelectTrigger id="gender" name="gender" aria-labelledby="gender-label">
                       <SelectValue placeholder="Selecciona género" />
                     </SelectTrigger>
                     <SelectContent>
@@ -483,11 +491,11 @@ export function Profile() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <Label className="text-gray-500">ID de usuario</Label>
+                    <p className="text-gray-500 dark:text-white text-sm font-medium">ID de usuario</p>
                     <p className="font-medium">{userData?.user.id}</p>
                   </div>
                   <div>
-                    <Label className="text-gray-500">Estado del correo</Label>
+                    <p className="text-gray-500 dark:text-white text-sm font-medium">Estado del correo</p>
                     <p
                       className={`font-medium ${userData?.user.email_verified_at ? "text-green-600" : "text-orange-600"}`}
                     >
@@ -499,7 +507,7 @@ export function Profile() {
                 <Separator />
 
                 <div>
-                  <Label className="text-gray-500 text-sm">Roles</Label>
+                  <p className="text-gray-500 dark:text-white text-sm font-medium">Roles</p>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {userData?.roles.map((role) => (
                       <Badge key={role} variant="outline" className="bg-blue-50 text-blue-700">
@@ -510,7 +518,7 @@ export function Profile() {
                 </div>
 
                 <div>
-                  <Label className="text-gray-500 text-sm">Permisos</Label>
+                  <p className="text-gray-500 dark:text-white text-sm font-medium">Permisos</p>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {userData?.permissions.map((permission) => (
                       <Badge key={permission} variant="outline" className="bg-gray-50 text-gray-700">
@@ -543,6 +551,7 @@ export function Profile() {
                         value={passwordData.current_password}
                         onChange={handlePasswordChange}
                         disabled={saving}
+                        autoComplete="current-password"
                       />
                       <Button
                         type="button"
@@ -566,6 +575,7 @@ export function Profile() {
                         value={passwordData.new_password}
                         onChange={handlePasswordChange}
                         disabled={saving}
+                        autoComplete="new-password"
                       />
                       <Button
                         type="button"
@@ -589,6 +599,7 @@ export function Profile() {
                         value={passwordData.confirm_password}
                         onChange={handlePasswordChange}
                         disabled={saving}
+                        autoComplete="new-password"
                       />
                       <Button
                         type="button"

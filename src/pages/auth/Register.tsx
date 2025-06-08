@@ -53,7 +53,6 @@ export default function Register() {
       })
       navigate("/login")
     } catch (err) {
-      
     } finally {
       setLoading(false)
     }
@@ -92,6 +91,7 @@ export default function Register() {
               required
               className="h-12"
               disabled={loading}
+              autoComplete="given-name"
             />
           </div>
           <div className="space-y-2">
@@ -105,6 +105,7 @@ export default function Register() {
               onChange={handleChange}
               className="h-12"
               disabled={loading}
+              autoComplete="additional-name"
             />
           </div>
           <div className="space-y-2">
@@ -118,6 +119,7 @@ export default function Register() {
               onChange={handleChange}
               className="h-12"
               disabled={loading}
+              autoComplete="family-name"
             />
           </div>
           <div className="space-y-2">
@@ -132,6 +134,7 @@ export default function Register() {
               required
               className="h-12"
               disabled={loading}
+              autoComplete="off"
             />
           </div>
           <div className="space-y-2">
@@ -145,6 +148,7 @@ export default function Register() {
               onChange={handleChange}
               className="h-12"
               disabled={loading}
+              autoComplete="bday"
             />
           </div>
           <div className="space-y-2">
@@ -158,14 +162,15 @@ export default function Register() {
               onChange={handleChange}
               className="h-12"
               disabled={loading}
+              autoComplete="tel"
             />
           </div>
           <div className="space-y-2">
             <label htmlFor="gender" className="text-sm font-medium text-foreground">
               Género
             </label>
-            <Select onValueChange={handleSelectChange} disabled={loading}>
-              <SelectTrigger className="h-12">
+            <Select onValueChange={handleSelectChange} disabled={loading} name="gender" id="gender">
+              <SelectTrigger className="h-12" id="gender" name="gender" autoComplete="sex">
                 <SelectValue placeholder="Selecciona tu género" />
               </SelectTrigger>
               <SelectContent>
@@ -187,6 +192,7 @@ export default function Register() {
               required
               className="h-12"
               disabled={loading}
+              autoComplete="email"
             />
           </div>
           <div className="space-y-2">
@@ -203,6 +209,7 @@ export default function Register() {
               minLength={8}
               className="h-12"
               disabled={loading}
+              autoComplete="new-password"
             />
           </div>
           <div className="space-y-2">
@@ -219,6 +226,7 @@ export default function Register() {
               minLength={8}
               className="h-12"
               disabled={loading}
+              autoComplete="new-password"
             />
           </div>
           <Button type="submit" className="w-full h-12 bg-green-500 hover:bg-green-600 mt-4" disabled={loading}>

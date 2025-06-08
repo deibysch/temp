@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState } from "react"
+import type React from "react"
+import { useState } from "react"
 import { useSearchParams, Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -55,9 +56,7 @@ export default function ResetPassword() {
           <div className="w-5"></div>
         </div>
 
-        <p className="text-center text-muted-foreground">
-          Ingresa tu nueva contraseña para tu cuenta.
-        </p>
+        <p className="text-center text-muted-foreground">Ingresa tu nueva contraseña para tu cuenta.</p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
@@ -73,6 +72,7 @@ export default function ResetPassword() {
               required
               disabled={isSubmitting || isSuccess}
               className="h-12"
+              autoComplete="email"
             />
           </div>
           <div className="space-y-2">
@@ -88,6 +88,7 @@ export default function ResetPassword() {
               required
               disabled={isSubmitting || isSuccess}
               className="h-12"
+              autoComplete="new-password"
             />
           </div>
           <div className="space-y-2">
@@ -103,11 +104,10 @@ export default function ResetPassword() {
               required
               disabled={isSubmitting || isSuccess}
               className="h-12"
+              autoComplete="new-password"
             />
           </div>
-          {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
-          )}
+          {error && <div className="text-red-500 text-sm text-center">{error}</div>}
           <Button
             type="submit"
             className="w-full h-12 bg-green-500 hover:bg-green-600"

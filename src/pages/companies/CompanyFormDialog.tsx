@@ -188,6 +188,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                     value={formData.name || ""}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
+                    autoComplete="organization"
                   />
                 </div>
                 <div>
@@ -196,6 +197,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                     id="photo_url"
                     value={formData.photo_url || ""}
                     onChange={(e) => setFormData({ ...formData, photo_url: e.target.value })}
+                    autoComplete="url"
                   />
                 </div>
                 <div>
@@ -204,6 +206,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                     id="description"
                     value={formData.description || ""}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    autoComplete="off"
                   />
                 </div>
                 <div>
@@ -212,6 +215,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                     id="address"
                     value={formData.address || ""}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    autoComplete="street-address"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -221,6 +225,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                       id="latitude"
                       value={formData.latitude || ""}
                       onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
+                      autoComplete="off"
                     />
                   </div>
                   <div>
@@ -229,6 +234,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                       id="longitude"
                       value={formData.longitude || ""}
                       onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
+                      autoComplete="off"
                     />
                   </div>
                 </div>

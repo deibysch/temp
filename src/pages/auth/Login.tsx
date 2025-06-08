@@ -25,7 +25,6 @@ export default function Login() {
         navigate("/dashboard")
       }
     } catch (err) {
-
     } finally {
       setLoading(false)
     }
@@ -59,6 +58,7 @@ export default function Login() {
               required
               className="h-12"
               disabled={loading}
+              autoComplete="email"
             />
           </div>
 
@@ -76,6 +76,7 @@ export default function Login() {
                 required
                 className="h-12 pr-10"
                 disabled={loading}
+                autoComplete="current-password"
               />
               <button
                 type="button"

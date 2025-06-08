@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Search, Edit, Trash2, ChevronLeft, ChevronRight, Bell, Menu } from "lucide-react"
+import { Search, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
 import type { Company } from "@/types/companies"
 import { useNavigate } from "react-router-dom"
 import { toast } from "@/components/ui/use-toast"
@@ -139,6 +139,7 @@ export default function Page() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 border-0 bg-white dark:bg-gray-800 shadow-sm"
+                  autoComplete="off"
                 />
               </div>
               <CompanyFormDialog

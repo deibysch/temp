@@ -1,5 +1,3 @@
-import { GET } from "../services/http";
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.ahorraya.shop";
 
 export const ENDPOINTS = {
@@ -10,6 +8,7 @@ export const ENDPOINTS = {
   RESET_PASSWORD: API_BASE_URL+"/reset-password",
   
   PROFILE: API_BASE_URL+"/profile",
+  VERIFY_EMAIL: API_BASE_URL+"/verify-email",
   CHANGE_PASSWORD: API_BASE_URL+"/change-password",
 
   COMPANIES: API_BASE_URL+"/companies",

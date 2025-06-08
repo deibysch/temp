@@ -123,6 +123,10 @@ export async function updateProfile(data: {
   }
 }
 
+export async function verifyEmail(){
+
+}
+
 export async function changePassword(current_password: string, new_password: string, new_password_confirmation: string) {
   const loading = showInfoToast("Cambiando contraseña...", "Por favor espera");
   try {

@@ -25,7 +25,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { useNavigate } from "react-router-dom"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
-import { updateProfile, changePassword, getProfile } from "./authApi"
+import { updateProfile, changePassword, getProfile, sendEmailVerification } from "./authApi"
 import type { User, UserUpdateInput } from "@/types/user"
 
 interface UserData {
@@ -232,12 +232,17 @@ export function Profile() {
   const handleVerifyEmail = async () => {
     try {
       setSaving(true)
-      // Aquí iría la lógica para enviar email de verificación
+      await sendEmailVerification()
       toast({
         title: "Éxito",
         description: "Correo de verificación enviado correctamente",
       })
     } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo enviar el correo de verificación",
+        variant: "destructive",
+      })
     } finally {
       setSaving(false)
     }

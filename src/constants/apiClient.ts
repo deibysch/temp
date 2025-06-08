@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.ahorraya.shop";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.ahorraya.shop";
 
 export const ENDPOINTS = {
   REGISTER: API_BASE_URL+"/register",
@@ -8,7 +8,8 @@ export const ENDPOINTS = {
   RESET_PASSWORD: API_BASE_URL+"/reset-password",
   
   PROFILE: API_BASE_URL+"/profile",
-  VERIFY_EMAIL: API_BASE_URL+"/verify-email",
+  SEND_EMAIL_VERIFICATION: API_BASE_URL+"/send-email-verification",
+  VERIFY_EMAIL_LINK: API_BASE_URL+"/verify-email-link",
   CHANGE_PASSWORD: API_BASE_URL+"/change-password",
 
   COMPANIES: API_BASE_URL+"/companies",

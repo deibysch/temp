@@ -123,8 +123,17 @@ export async function updateProfile(data: {
   }
 }
 
-export async function verifyEmail(){
-
+export async function sendEmailVerification() {
+  const loading = showInfoToast("Enviando correo de verificación...", "Por favor espera");
+  try {
+    const res = await POST(ENDPOINTS.SEND_EMAIL_VERIFICATION, {});
+    showSuccessToast("Correo enviado", "Revisa tu bandeja de entrada para verificar tu correo");
+    return res;
+  } catch (error) {
+    throw error;
+  } finally {
+    loading.dismiss();
+  }
 }
 
 export async function changePassword(current_password: string, new_password: string, new_password_confirmation: string) {
@@ -138,5 +147,15 @@ export async function changePassword(current_password: string, new_password: str
     throw error;
   } finally {
     loading.dismiss();
+  }
+}
+
+export async function verifyEmailLink(id: string, hash: string, search: string = "") {
+  const url = `${ENDPOINTS.VERIFY_EMAIL_LINK}/${id}/${hash}${search}`;
+  try {
+    const data = await GET(url);
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "No se pudo verificar el correo.");
   }
 }

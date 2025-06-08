@@ -8,6 +8,7 @@ import Dashboard from "./pages/companies/CompaniesShowAll";
 import { Profile } from "./pages/auth/Profile";
 import { Toaster } from "./components/ui/toaster";
 import { useAuth } from "./hooks/useAuth";
+import VerifyEmail from "./pages/auth/VerifyEmailLink";
 
 function ProtectedRoute({ role, redirectPath = "/login" }: { role: string, redirectPath?: string }) {
   const { hasAnyRole } = useAuth();
@@ -43,6 +44,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
+        <Route path="/verify-email/:id/:hash" element={<VerifyEmail />} />
       </Routes>
       <Toaster />
     </>

@@ -14,10 +14,9 @@ import { logout } from '@/pages/auth/authApi'
 
 interface UserAvatarProps {
   user: User;
-  onLogout: () => void;
 }
 
-export function UserAvatar({ user, onLogout }: UserAvatarProps) {
+export function UserAvatar({ user }: UserAvatarProps) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -28,7 +27,6 @@ export function UserAvatar({ user, onLogout }: UserAvatarProps) {
     } catch (e) {
       
     }
-    onLogout();
     navigate('/login');
   };
 

@@ -4,11 +4,13 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import Dashboard from "./pages/companies/CompaniesShowAll";
+import Dashboard from "./pages/Dashboard";
+import Companies from "./pages/companies/CompaniesShowAll";
 import { Profile } from "./pages/auth/Profile";
 import { Toaster } from "./components/ui/toaster";
 import { useAuth } from "./hooks/useAuth";
 import VerifyEmail from "./pages/auth/VerifyEmailLink";
+import Settings from "./pages/Settings";
 
 function ProtectedRoute({ role, redirectPath = "/login" }: { role: string, redirectPath?: string }) {
   const { hasAnyRole } = useAuth();
@@ -42,7 +44,9 @@ function App() {
         </Route>
         <Route element={<ProtectedRoute role="su" redirectPath="/login" />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/companies" element={<Companies />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
         <Route path="/verify-email/:id/:hash" element={<VerifyEmail />} />
       </Routes>

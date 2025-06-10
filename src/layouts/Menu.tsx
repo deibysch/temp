@@ -7,6 +7,7 @@ import {
   Settings,
   HelpCircle,
 } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 type MenuSidebarProps = {
   sidebarOpen: boolean
@@ -20,15 +21,15 @@ const menuSections = [
   {
     title: "Principal",
     items: [
-      { id: "dashboard", icon: Home, label: "Dashboard", badge: null },
-      { id: "companies", icon: Package, label: "Empresas", badgeKey: "companiesCount" },
+      { id: "dashboard", icon: Home, label: "Dashboard", badge: null, path: "/dashboard" },
+      { id: "companies", icon: Package, label: "Empresas", badgeKey: "companiesCount", path: "/companies" },
     ],
   },
   {
     title: "Configuración",
     items: [
-      { id: "settings", icon: Settings, label: "Ajustes", badge: null },
-      { id: "help", icon: HelpCircle, label: "Ayuda", badge: null },
+      { id: "settings", icon: Settings, label: "Ajustes", badge: null, path: "/settings" },
+      { id: "help", icon: HelpCircle, label: "Ayuda", badge: null, path: "/help" },
     ],
   },
 ]
@@ -40,6 +41,7 @@ export default function MenuSidebar({
   setActiveSection,
   companiesCount,
 }: MenuSidebarProps) {
+  const navigate = useNavigate()
   return (
     <div
       className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform ${
@@ -72,6 +74,7 @@ export default function MenuSidebar({
                     onClick={() => {
                       setActiveSection(item.id)
                       setSidebarOpen(false)
+                      if (item.path) navigate(item.path)
                     }}
                     className={`w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeSection === item.id

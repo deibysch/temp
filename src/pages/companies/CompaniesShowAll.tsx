@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Search, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
 import type { Company } from "@/types/companies"
-import { useNavigate } from "react-router-dom"
 import { toast } from "@/components/ui/use-toast"
 import MenuSidebar from "@/layouts/Menu"
 import * as companiesApi from "./companiesApi"
@@ -27,7 +26,6 @@ export default function Page() {
   const [activeSection, setActiveSection] = useState("companies")
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [companyToDelete, setCompanyToDelete] = useState<Company | null>(null)
-  const navigate = useNavigate()
 
   const itemsPerPage = 6
 
@@ -53,10 +51,6 @@ export default function Page() {
   const fetchCompanies = async () => {
     const data = await companiesApi.getCompanies()
     setCompanies(data)
-  }
-
-  const handleLogout = () => {
-    navigate("/login")
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -122,9 +116,8 @@ export default function Page() {
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
         <Header
-          companiesCount={companies.length}
+          title="Empresas"
           onSidebarOpen={() => setSidebarOpen(true)}
-          onLogout={handleLogout}
         />
 
         {/* Content */}

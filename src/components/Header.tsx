@@ -6,9 +6,8 @@ import { Navigate } from "react-router-dom"
 import Login from "../pages/auth/Login"
 
 interface HeaderProps {
-  companiesCount: number
+  title: string
   onSidebarOpen: () => void
-  onLogout: () => void
 }
 
 const STORAGE_VERSION = 'v1';
@@ -19,9 +18,8 @@ if (localStorage.getItem('storageVersion') !== STORAGE_VERSION) {
 }
 
 export default function Header({
-  companiesCount,
+  title,
   onSidebarOpen,
-  onLogout,
 }: HeaderProps) {
   const localUser = useMemo(() => {
       const userStr = localStorage.getItem("user")
@@ -38,7 +36,7 @@ export default function Header({
             <Menu className="h-5 w-5" />
           </Button>
           <h1 className="text-xl font-semibold text-green-600 dark:text-green-400">
-            {companiesCount} Empresas
+            {title}
           </h1>
         </div>
         <div className="flex items-center space-x-4">
@@ -48,7 +46,6 @@ export default function Header({
           <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
           <UserAvatar
             user={localUser}
-            onLogout={onLogout}
           />
         </div>
       </div>

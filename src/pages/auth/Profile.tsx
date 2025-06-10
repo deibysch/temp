@@ -251,10 +251,10 @@ export function Profile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br dark:bg-gray-900">
         <div className="text-center space-y-4">
           <Loader2 className="h-12 w-12 animate-spin mx-auto text-blue-600" />
-          <p className="text-gray-600">Cargando tu perfil...</p>
+          <p className="text-gray-600 dark:text-gray-300">Cargando tu perfil...</p>
         </div>
       </div>
     )

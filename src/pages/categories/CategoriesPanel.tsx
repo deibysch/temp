@@ -134,7 +134,7 @@ export default function Page() {
               </div>
               <div className="flex gap-2">
                 <Button onClick={openAddCategoryDialog} className="bg-green-600 dark:bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-700">
-                  + Agregar categoría
+                  + Nueva Categoría
                 </Button>
                 <CategoryFormDialog
                   open={categoryDialogOpen}

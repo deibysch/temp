@@ -45,7 +45,7 @@ const DiscountDeleteDialog: React.FC<Props> = ({ open, setOpen, discount, onConf
                     variant={discount.is_active ? "default" : "secondary"}
                     className={
                       discount.is_active
-                        ? "bg-green-600 dark:bg-green-500 text-white"
+                        ? "bg-green-600 dark:bg-green-600 text-white"
                         : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
                     }
                   >

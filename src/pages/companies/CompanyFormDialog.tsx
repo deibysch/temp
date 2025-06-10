@@ -160,7 +160,7 @@ const CompanyFormDialog: React.FC<Props> = ({
         <DialogTrigger asChild>
           <Button
             onClick={openAddDialog}
-            className="bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600"
+            className="bg-green-600 dark:bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-700"
           >
             <Plus className="h-4 w-4 mr-2" />
             Nueva Empresa
@@ -240,7 +240,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600"
+                  className="w-full bg-green-600 dark:bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-700"
                 >
                   {editingCompany ? "Actualizar Empresa" : "Crear Empresa"}
                 </Button>
@@ -289,7 +289,7 @@ const CompanyFormDialog: React.FC<Props> = ({
                                 variant={discount.is_active ? "default" : "secondary"}
                                 className={
                                   discount.is_active
-                                    ? "bg-green-600 dark:bg-green-500 text-white"
+                                    ? "bg-green-600 dark:bg-green-600 text-white"
                                     : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
                                 }
                               >

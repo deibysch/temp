@@ -25,8 +25,8 @@ async function handleResponse<T>(promise: Promise<{ data: T }>) {
         const data = error.response?.data;
         errorMessage = data?.message || data?.detail || data?.error || `Error ${error.response?.status}`;
         if (error.response?.status === 401) {
-          localStorage.clear();
           if (window.location.pathname != "/login") {
+            localStorage.clear();
             window.location.href = "/login";
             return;
           }

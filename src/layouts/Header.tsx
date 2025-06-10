@@ -29,7 +29,7 @@ export default function Header({
   }, [])
 
   return (
-    <header className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 sticky top-0">
+    <header className="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" className="lg:hidden" onClick={onSidebarOpen}>

@@ -26,7 +26,7 @@ function ProgressBar({
       case "destructive":
         return "bg-red-500 dark:bg-red-400"
       case "success":
-        return "bg-green-600 dark:bg-green-500"
+        return "bg-green-600 dark:bg-green-600"
       default:
         return "bg-blue-500 dark:bg-blue-400"
     }

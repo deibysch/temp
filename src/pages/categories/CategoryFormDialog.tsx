@@ -1,7 +1,8 @@
 import React from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import type { Category } from "@/types/categories"
 
 interface Props {
@@ -33,35 +34,49 @@ const CategoryFormDialog: React.FC<Props> = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-md w-[calc(100%-2rem)] mx-auto">
         <DialogHeader>
           <DialogTitle>{editingCategory ? "Editar Categoría" : "Agregar Categoría"}</DialogTitle>
+          <DialogDescription>
+            {editingCategory
+              ? "Modifica los datos de la categoría"
+              : "Completa el formulario para crear una nueva categoría"}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
-          <Input
-            placeholder="Nombre"
-            value={formData.name || ""}
-            onChange={e => setFormData({ ...formData, name: e.target.value })}
-            required
-          />
-          <Input
-            placeholder="URL de la imagen (opcional)"
-            value={formData.photo_url || ""}
-            onChange={e => setFormData({ ...formData, photo_url: e.target.value })}
-          />
-          <Input
-            placeholder="Descripción (opcional)"
-            value={formData.description || ""}
-            onChange={e => setFormData({ ...formData, description: e.target.value })}
-          />
-          <DialogFooter>
-            <Button type="button" variant="secondary" onClick={handleClose}>
-              Cancelar
-            </Button>
-            <Button type="submit">
-              {editingCategory ? "Actualizar" : "Crear"}
-            </Button>
-          </DialogFooter>
+          <div>
+            <Label htmlFor="category-name">
+              Nombre <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="category-name"
+              value={formData.name || ""}
+              onChange={e => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="category-photo-url">Logo (URL)</Label>
+            <Input
+              id="category-photo-url"
+              value={formData.photo_url || ""}
+              onChange={e => setFormData({ ...formData, photo_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label htmlFor="category-description">Descripción</Label>
+            <Input
+              id="category-description"
+              value={formData.description || ""}
+              onChange={e => setFormData({ ...formData, description: e.target.value })}
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-full bg-green-600 dark:bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-700"
+          >
+            {editingCategory ? "Actualizar Categoria" : "Crear Categoria"}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

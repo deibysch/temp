@@ -18,22 +18,22 @@ const CategoryDeleteDialog: React.FC<Props> = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-md w-[calc(100%-2rem)] mx-auto" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Eliminar Categoría</DialogTitle>
         </DialogHeader>
-        <div>
+        <div className="py-2">
           ¿Estás seguro que deseas eliminar la categoría{" "}
           <span className="font-semibold">{category?.name}</span>?
         </div>
-        <DialogFooter>
-          <Button variant="secondary" onClick={() => setOpen(false)}>
+        <div className="flex justify-end gap-2 mt-4">
+          <Button variant="outline" onClick={() => setOpen(false)}>
             Cancelar
           </Button>
           <Button variant="destructive" onClick={onConfirm}>
             Eliminar
           </Button>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   )

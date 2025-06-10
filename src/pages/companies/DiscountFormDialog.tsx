@@ -174,7 +174,7 @@ const DiscountFormDialog: React.FC<Props> = ({
           <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="submit"
-              className="flex-1 bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600"
+              className="flex-1 bg-green-600 dark:bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-700"
             >
               {editingDiscount ? "Actualizar Descuento" : "Crear Descuento"}
             </Button>

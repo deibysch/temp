@@ -25,7 +25,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { useNavigate } from "react-router-dom"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
-import { updateProfile, changePassword, getProfile, sendEmailVerification } from "./authApi"
+import { updateProfile, changePassword, getProfile, sendEmailVerification, updateProfilePicture } from "./authApi"
 import type { User, UserUpdateInput } from "@/types/user"
 
 interface UserData {
@@ -151,15 +151,16 @@ export function Profile() {
 
     try {
       setSaving(true)
-      // Aquí iría la lógica para subir la imagen
+      await updateProfilePicture(e.target.files[0])
+      await loadUserData()
       toast({
-        title: "Success",
-        description: "Profile picture updated successfully",
+        title: "Éxito",
+        description: "Foto de perfil actualizada correctamente",
       })
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to upload profile picture",
+        description: "No se pudo actualizar la foto de perfil",
         variant: "destructive",
       })
     } finally {
@@ -267,7 +268,7 @@ export function Profile() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/dashboard')}
             className="hover:bg-emerald-50 dark:hover:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />

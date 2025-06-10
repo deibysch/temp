@@ -136,6 +136,16 @@ export async function sendEmailVerification() {
   }
 }
 
+export async function verifyEmailLink(id: string, hash: string, search: string = "") {
+  const url = `${ENDPOINTS.VERIFY_EMAIL_LINK}/${id}/${hash}${search}`;
+  try {
+    const data = await GET(url);
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "No se pudo verificar el correo.");
+  }
+}
+
 export async function changePassword(current_password: string, new_password: string, new_password_confirmation: string) {
   const loading = showInfoToast("Cambiando contraseña...", "Por favor espera");
   try {
@@ -150,12 +160,19 @@ export async function changePassword(current_password: string, new_password: str
   }
 }
 
-export async function verifyEmailLink(id: string, hash: string, search: string = "") {
-  const url = `${ENDPOINTS.VERIFY_EMAIL_LINK}/${id}/${hash}${search}`;
+export async function updateProfilePicture(file: File) {
+  const loading = showInfoToast("Actualizando foto de perfil...", "Por favor espera");
   try {
-    const data = await GET(url);
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "No se pudo verificar el correo.");
+    const formData = new FormData();
+    formData.append("picture", file);
+    const res = await POST(ENDPOINTS.PROFILE + "/picture", formData, {
+      "Content-Type": "multipart/form-data",
+    });
+    showSuccessToast("Foto de perfil actualizada", "Tu foto se actualizó correctamente");
+    return res;
+  } catch (error) {
+    throw error;
+  } finally {
+    loading.dismiss();
   }
 }

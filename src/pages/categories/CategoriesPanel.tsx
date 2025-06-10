@@ -32,7 +32,7 @@ export default function Page() {
     return categories.filter(
       (category) =>
         category.name.toLowerCase().includes(categorySearchTerm.toLowerCase()) ||
-        (category.description?.toLowerCase().includes(categorySearchTerm.toLowerCase()) ?? ""),
+        (category.description?.toLowerCase().includes(categorySearchTerm.toLowerCase()) ?? false),
     )
   }, [categories, categorySearchTerm])
 
@@ -46,6 +46,10 @@ export default function Page() {
   useEffect(() => {
     fetchCategories()
   }, [])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [categorySearchTerm])
 
   const fetchCategories = async () => {
     const data = await categoriesApi.getCategories()
@@ -106,7 +110,7 @@ export default function Page() {
         setSidebarOpen={setSidebarOpen}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
-        companiesCount={undefined}
+        categoriesCount={categories.length}
       />
 
       {/* Main Content */}
@@ -252,26 +256,35 @@ export default function Page() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm text-muted-foreground px-2">
-                  {currentPage} / {totalPages}
+              <div className="flex flex-col items-center gap-1">
+                <div className="flex justify-center items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm text-muted-foreground px-2">
+                    {currentPage} / {totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  Visualizando registros {(currentPage - 1) * itemsPerPage + 1}
+                  –
+                  {Math.min(currentPage * itemsPerPage, filteredCategories.length)}
+                  {" de "}
+                  {filteredCategories.length}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
               </div>
             )}
             <CategoryDeleteDialog

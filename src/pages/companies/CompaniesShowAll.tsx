@@ -33,7 +33,7 @@ export default function Page() {
     return companies.filter(
       (company) =>
         company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        company.address.toLowerCase().includes(searchTerm.toLowerCase()),
+        (company.address?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
     )
   }, [companies, searchTerm])
 
@@ -47,6 +47,10 @@ export default function Page() {
   useEffect(() => {
     fetchCompanies()
   }, [])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm])
 
   const fetchCompanies = async () => {
     const data = await companiesApi.getCompanies()
@@ -253,26 +257,35 @@ export default function Page() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm text-muted-foreground px-2">
-                  {currentPage} / {totalPages}
+              <div className="flex flex-col items-center gap-1">
+                <div className="flex justify-center items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm text-muted-foreground px-2">
+                    {currentPage} / {totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  Visualizando registros {(currentPage - 1) * itemsPerPage + 1}
+                  –
+                  {Math.min(currentPage * itemsPerPage, filteredCompanies.length)}
+                  {" de "}
+                  {filteredCompanies.length}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
               </div>
             )}
             <CompanyDeleteDialog

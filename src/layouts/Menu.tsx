@@ -1,11 +1,10 @@
 import { Badge } from "@/components/ui/badge"
 import {
-  Menu,
-  Home,
   Package,
-  Bell,
   Settings,
   HelpCircle,
+  Building2,
+  GaugeCircle,
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
@@ -15,15 +14,16 @@ type MenuSidebarProps = {
   activeSection: string
   setActiveSection: (section: string) => void
   companiesCount: number
+  categoriesCount: number
 }
 
 const menuSections = [
   {
     title: "Principal",
     items: [
-      { id: "dashboard", icon: Home, label: "Dashboard", badge: null, path: "/dashboard" },
+      { id: "dashboard", icon: GaugeCircle, label: "Dashboard", badge: null, path: "/dashboard" },
       { id: "categories", icon: Package, label: "Categorias", badgeKey: "categoriesCount", path: "/categories" },
-      { id: "companies", icon: Package, label: "Empresas", badgeKey: "companiesCount", path: "/companies" },
+      { id: "companies", icon: Building2, label: "Empresas", badgeKey: "companiesCount", path: "/companies" },
     ],
   },
   {
@@ -41,6 +41,7 @@ export default function MenuSidebar({
   activeSection,
   setActiveSection,
   companiesCount,
+  categoriesCount,
 }: MenuSidebarProps) {
   const navigate = useNavigate()
   return (
@@ -69,6 +70,7 @@ export default function MenuSidebar({
                 const Icon = item.icon
                 let badge = item.badge
                 if (item.badgeKey === "companiesCount") badge = companiesCount?.toString()
+                if (item.badgeKey === "categoriesCount") badge = categoriesCount?.toString()
                 return (
                   <button
                     key={item.id}

@@ -22,6 +22,7 @@ const menuSections = [
     title: "Principal",
     items: [
       { id: "dashboard", icon: Home, label: "Dashboard", badge: null, path: "/dashboard" },
+      { id: "categories", icon: Package, label: "Categorias", badgeKey: "categoriesCount", path: "/categories" },
       { id: "companies", icon: Package, label: "Empresas", badgeKey: "companiesCount", path: "/companies" },
     ],
   },

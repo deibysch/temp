@@ -12,6 +12,7 @@ export const ENDPOINTS = {
   VERIFY_EMAIL_LINK: API_BASE_URL+"/verify-email-link",
   CHANGE_PASSWORD: API_BASE_URL+"/change-password",
 
+  CATEGORIES: API_BASE_URL+"/categories",
   COMPANIES: API_BASE_URL+"/companies",
   DISCOUNTS: API_BASE_URL+"/discounts",
 }

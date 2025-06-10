@@ -6,6 +6,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Companies from "./pages/companies/CompaniesShowAll";
+import Categories from "./pages/categories/CategoriesPanel";
 import { Profile } from "./pages/auth/Profile";
 import { Toaster } from "./components/ui/toaster";
 import { useAuth } from "./hooks/useAuth";
@@ -45,6 +46,7 @@ function App() {
         </Route>
         <Route element={<ProtectedRoute role="su" redirectPath="/login" />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/companies" element={<Companies />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />

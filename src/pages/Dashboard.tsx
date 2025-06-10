@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import Header from "@/components/Header"
+import Header from "@/layouts/Header"
 import MenuSidebar from "@/layouts/Menu"
 
 
@@ -15,7 +15,6 @@ export default function Settings() {
         setSidebarOpen={setSidebarOpen}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
-        companiesCount={0}
       />
 
       {/* Main Content */}

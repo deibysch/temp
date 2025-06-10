@@ -67,7 +67,7 @@ export default function MenuSidebar({
               {section.items.map((item) => {
                 const Icon = item.icon
                 let badge = item.badge
-                if (item.badgeKey === "companiesCount") badge = companiesCount.toString()
+                if (item.badgeKey === "companiesCount") badge = companiesCount?.toString()
                 return (
                   <button
                     key={item.id}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "@/components/Header";
+import Header from "@/layouts/Header";
 import MenuSidebar from "@/layouts/Menu";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -37,7 +37,6 @@ export default function Settings() {
         setSidebarOpen={setSidebarOpen}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
-        companiesCount={0}
       />
 
       {/* Main Content */}

@@ -13,7 +13,7 @@ import MenuSidebar from "@/layouts/Menu"
 import * as companiesApi from "./companiesApi"
 import CompanyFormDialog from "./CompanyFormDialog"
 import CompanyDeleteDialog from "./CompanyDeleteDialog"
-import Header from "@/components/Header"
+import Header from "@/layouts/Header"
 
 export default function Page() {
   const [companies, setCompanies] = useState<Company[]>([])

@@ -14,6 +14,9 @@ import * as companiesApi from "./companiesApi"
 import CompanyFormDialog from "./CompanyFormDialog"
 import CompanyDeleteDialog from "./CompanyDeleteDialog"
 import Header from "@/layouts/Header"
+import * as categoriesApi from "../categories/categoriesApi"
+import type { Category } from "@/types/category"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 
 export default function Page() {
   const [companies, setCompanies] = useState<Company[]>([])
@@ -26,6 +29,8 @@ export default function Page() {
   const [activeSection, setActiveSection] = useState("companies")
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [companyToDelete, setCompanyToDelete] = useState<Company | null>(null)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
 
   const itemsPerPage = 6
 
@@ -45,15 +50,29 @@ export default function Page() {
   const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
 
   useEffect(() => {
-    fetchCompanies()
+    fetchCategories()
   }, [])
 
   useEffect(() => {
+    fetchCompanies()
+  }, [selectedCategory])
+
+  useEffect(() => {
     setCurrentPage(1)
-  }, [searchTerm])
+  }, [searchTerm, selectedCategory])
+
+  const fetchCategories = async () => {
+    try {
+      const data = await categoriesApi.getCategories()
+      setCategories(data)
+    } catch (error) {
+      
+    }
+  }
 
   const fetchCompanies = async () => {
-    const data = await companiesApi.getCompanies()
+    // Si selectedCategory es "all", no filtrar por categoría
+    const data = await companiesApi.getCompanies(selectedCategory !== "all" ? Number(selectedCategory) : undefined)
     setCompanies(data)
   }
 
@@ -105,6 +124,13 @@ export default function Page() {
     setIsDialogOpen(true)
   }
 
+  // Helper para obtener el nombre de la categoría por id
+  const getCategoryName = (categoryId?: number) => {
+    if (!categoryId) return "-"
+    const cat = categories.find(c => c.id === categoryId)
+    return cat ? cat.name : "-"
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
       {/* Sidebar */}
@@ -127,17 +153,37 @@ export default function Page() {
         {/* Content */}
         <main className="flex-1 p-4 max-w-7xl mx-auto w-full">
           <div className="space-y-6">
-            {/* Search and Add */}
+            {/* Search, Category Filter and Add */}
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  placeholder="Buscar empresas..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-0 bg-white dark:bg-gray-800 shadow-sm"
-                  autoComplete="off"
-                />
+              <div className="flex flex-col sm:flex-row gap-2 flex-1 w-full max-w-2xl">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    placeholder="Buscar empresas..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 border-0 bg-white dark:bg-gray-800 shadow-sm w-full"
+                    autoComplete="off"
+                  />
+                </div>
+                <div className="flex-1">
+                  <Select
+                    value={selectedCategory}
+                    onValueChange={value => setSelectedCategory(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Todas las categorías" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todas las categorías</SelectItem>
+                      {categories.map(cat => (
+                        <SelectItem key={cat.id} value={String(cat.id)}>
+                          {cat.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <CompanyFormDialog
                 open={isDialogOpen}
@@ -159,8 +205,8 @@ export default function Page() {
                     <TableRow className="border-b">
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Logo</TableHead>
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Nombre</TableHead>
-                      <TableHead className="font-medium text-green-600 dark:text-green-400">Dirección</TableHead>
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Descripción</TableHead>
+                      <TableHead className="font-medium text-green-600 dark:text-green-400">Categoría</TableHead>
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -177,8 +223,8 @@ export default function Page() {
                           )}
                         </TableCell>
                         <TableCell className="font-medium">{company.name}</TableCell>
-                        <TableCell>{company.address}</TableCell>
                         <TableCell>{company.description}</TableCell>
+                        <TableCell>{getCategoryName(company.category_id)}</TableCell>
                         <TableCell>
                           <div className="flex gap-1">
                             <Button
@@ -227,8 +273,8 @@ export default function Page() {
                       </div>
                     </div>
                     <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                      <p>Dirección: {company.address}</p>
                       <p>{company.description}</p>
+                      <p>Categoría: {getCategoryName(company.category_id)}</p>
                     </div>
                     <div className="flex gap-2">
                       <Button

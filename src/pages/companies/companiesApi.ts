@@ -1,23 +1,20 @@
 import { GET, POST, PUT, DELETE } from "@/services/http"
 import { ENDPOINTS } from "@/constants/apiClient"
 import { showSuccessToast, showInfoToast } from "@/lib/toast-utils"
+import type { CompanyCreateInput, CompanyUpdateInput } from "@/types/company"
 
-export async function getCompanies() {
+export async function getCompanies(categoryId?: number) {
+  if (categoryId) {
+    return GET(`${ENDPOINTS.COMPANIES}?category-id=${categoryId}`)
+  }
   return GET(ENDPOINTS.COMPANIES)
 }
 
-export async function getCompany(id: number | string) {
+export async function getCompany(id: number) {
   return GET(`${ENDPOINTS.COMPANIES}/${id}`)
 }
 
-export async function createCompany(data: {
-  name: string
-  photo_url?: string
-  description?: string
-  address?: string
-  latitude?: string
-  longitude?: string
-}) {
+export async function createCompany(data: CompanyCreateInput) {
   const loading = showInfoToast("Creando empresa...", "Por favor espera")
   try {
     const res = await POST(ENDPOINTS.COMPANIES, data)
@@ -30,14 +27,7 @@ export async function createCompany(data: {
   }
 }
 
-export async function updateCompany(id: number | string, data: {
-  name?: string
-  photo_url?: string
-  description?: string
-  address?: string
-  latitude?: string
-  longitude?: string
-}) {
+export async function updateCompany(id: number, data: CompanyUpdateInput) {
   const loading = showInfoToast("Actualizando empresa...", "Por favor espera")
   try {
     const res = await PUT(`${ENDPOINTS.COMPANIES}/${id}`, data)

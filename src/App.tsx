@@ -4,15 +4,15 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import Dashboard from "./pages/Dashboard";
-import Companies from "./pages/companies/CompaniesPanel";
-import Categories from "./pages/categories/CategoriesPanel";
+import Dashboard from "./pages/su/Dashboard";
+import Companies from "./pages/su/companies/CompaniesPanel";
+import Categories from "./pages/su/categories/CategoriesPanel";
 import { Profile } from "./pages/auth/Profile";
 import { Toaster } from "./components/ui/toaster";
 import { useAuth } from "./hooks/useAuth";
 import VerifyEmail from "./pages/auth/VerifyEmailLink";
-import Settings from "./pages/Settings";
-import Help from "./pages/Help";
+import Settings from "./pages/su/Settings";
+import Help from "./pages/su/Help";
 import { ALIASES } from "./constants/routeAliases";
 
 function ProtectedRoute({ role, redirectPath = ALIASES.LOGIN }: { role: string, redirectPath?: string }) {

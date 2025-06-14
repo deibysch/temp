@@ -169,6 +169,7 @@ export default function Page() {
                 <Table>
                   <TableHeader>
                     <TableRow className="border-b">
+                      <TableHead className="font-medium text-green-600 dark:text-green-400 w-24">ID</TableHead>
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Nombre</TableHead>
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Acciones</TableHead>
                     </TableRow>
@@ -176,6 +177,7 @@ export default function Page() {
                   <TableBody>
                     {paginatedRoles.map((role) => (
                       <TableRow key={role.id} className="border-b hover:bg-green-50 dark:hover:bg-emerald-900/70 transition-colors">
+                        <TableCell className="font-mono text-xs text-gray-500 dark:text-gray-400">{role.id}</TableCell>
                         <TableCell className="font-medium">{role.name}</TableCell>
                         <TableCell>
                           <div className="flex gap-1">

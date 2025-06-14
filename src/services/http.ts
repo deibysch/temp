@@ -1,5 +1,6 @@
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast-utils"
+import { ALIASES } from "@/constants/routeAliases";
 
 const defaultHeaders = {
   "Accept": "application/json",
@@ -25,9 +26,9 @@ async function handleResponse<T>(promise: Promise<{ data: T }>) {
         const data = error.response?.data;
         errorMessage = data?.message || data?.detail || data?.error || `Error ${error.response?.status}`;
         if (error.response?.status === 401) {
-          if (window.location.pathname != "/login") {
+          if (window.location.pathname != ALIASES.LOGIN) {
             localStorage.clear();
-            window.location.href = "/login";
+            window.location.href = ALIASES.LOGIN;
             return;
           }
         }

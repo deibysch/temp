@@ -7,6 +7,8 @@ import {
   GaugeCircle,
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { ALIASES } from "@/constants/routeAliases";
+
 
 type MenuSidebarProps = {
   sidebarOpen: boolean
@@ -21,16 +23,16 @@ const menuSections = [
   {
     title: "Principal",
     items: [
-      { id: "dashboard", icon: GaugeCircle, label: "Dashboard", badge: null, path: "/dashboard" },
-      { id: "categories", icon: Package, label: "Categorias", badgeKey: "categoriesCount", path: "/categories" },
-      { id: "companies", icon: Building2, label: "Empresas", badgeKey: "companiesCount", path: "/companies" },
+      { id: "dashboard", icon: GaugeCircle, label: "Dashboard", badge: null, path: ALIASES.SU.DASHBOARD },
+      { id: "categories", icon: Package, label: "Categorias", badgeKey: "categoriesCount", path: ALIASES.SU.CATEGORIES },
+      { id: "companies", icon: Building2, label: "Empresas", badgeKey: "companiesCount", path: ALIASES.SU.COMPANIES },
     ],
   },
   {
     title: "Configuración",
     items: [
-      { id: "settings", icon: Settings, label: "Ajustes", badge: null, path: "/settings" },
-      { id: "help", icon: HelpCircle, label: "Ayuda", badge: null, path: "/help" },
+      { id: "settings", icon: Settings, label: "Ajustes", badge: null, path: ALIASES.SU.SETTINGS },
+      { id: "help", icon: HelpCircle, label: "Ayuda", badge: null, path: ALIASES.SU.HELP },
     ],
   },
 ]

@@ -157,15 +157,6 @@ const CompanyFormDialog: React.FC<Props> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button
-            onClick={openAddDialog}
-            className="bg-green-600 dark:bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-700"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Nueva Empresa
-          </Button>
-        </DialogTrigger>
         <DialogContent className="sm:max-w-4xl w-[calc(100%-2rem)] m-auto max-h-[calc(100%-2rem)] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingCompany ? "Editar Empresa" : "Nueva Empresa"}</DialogTitle>

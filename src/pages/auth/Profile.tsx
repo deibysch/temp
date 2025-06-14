@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 import { updateProfile, changePassword, getProfile, sendEmailVerification, updateProfilePicture } from "./authApi"
 import type { User, UserUpdateInput } from "@/types/user"
+import { ALIASES } from "@/constants/routeAliases"
 
 interface UserData {
   user: User
@@ -218,7 +219,7 @@ export function Profile() {
         description: "Contraseña cambiada correctamente",
       })
       setPasswordData({ current_password: "", new_password: "", confirm_password: "" })
-      navigate("/login")
+      navigate(ALIASES.LOGIN)
     } catch (error: any) {
       toast({
         title: "Error",
@@ -268,7 +269,7 @@ export function Profile() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate(ALIASES.SU.DASHBOARD)}
             className="hover:bg-emerald-50 dark:hover:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />

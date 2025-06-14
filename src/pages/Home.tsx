@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, MapPin, Clock, Users } from "lucide-react"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { ALIASES } from "@/constants/routeAliases"
 
 export default function Home() {
   const companies = [
@@ -73,12 +74,12 @@ export default function Home() {
           </div>
           <div className="flex items-center space-x-2">
             <ThemeToggle />
-            <Link to="/login">
+            <Link to={ALIASES.LOGIN}>
               <Button variant="outline" size="sm" className="text-xs px-3">
                 Iniciar Sesión
               </Button>
             </Link>
-            <Link to="/register">
+            <Link to={ALIASES.REGISTER}>
               <Button size="sm" className="bg-green-500 hover:bg-green-600 text-xs px-3">
                 Registrarse
               </Button>
@@ -102,7 +103,7 @@ export default function Home() {
             más.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4 px-4">
-            <Link to="/register">
+            <Link to={ALIASES.REGISTER}>
               <Button size="lg" className="bg-green-500 hover:bg-green-600 w-full sm:w-auto">
                 Empieza a ahorrar ahora
               </Button>
@@ -257,7 +258,7 @@ export default function Home() {
             Descarga la app y únete a la comunidad que ya está gastando menos.
           </p>
           <div className="space-y-4">
-            <Link to="/register">
+            <Link to={ALIASES.REGISTER}>
               <Button size="lg" variant="secondary" className="text-lg px-8 py-3">
                 Comenzar ahora por $9.99/mes
               </Button>

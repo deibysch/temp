@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { ALIASES } from "@/constants/routeAliases";
+
 
 export function useAuth() {
   const token = localStorage.getItem("token");
@@ -21,9 +23,9 @@ export function useAuth() {
     if (!isAuthenticated || !roles) return "";
     let parsedRoles = JSON.parse(roles);
 
-    if (parsedRoles.includes("su")) return "/dashboard";
-    else if (parsedRoles.includes("writer")) return "/writer-panel";
-    return "";
+    if (parsedRoles.includes("su")) return ALIASES.SU.DASHBOARD;
+    else if (parsedRoles.includes("writer")) return ALIASES.HOME;
+    return ALIASES.HOME;
   };
 
   return { isAuthenticated, hasAnyRole, getRedirectPathForRole };

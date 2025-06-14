@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { verifyEmailLink } from "./authApi";
+import { ALIASES } from "@/constants/routeAliases";
 
 export default function VerifyEmail() {
   const { id, hash } = useParams();
@@ -39,7 +40,7 @@ export default function VerifyEmail() {
             <p className="mt-2 text-gray-700 dark:text-gray-300">{message}</p>
             <button
               className="mt-6 px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate(ALIASES.LOGIN)}
             >
               Ir a iniciar sesión
             </button>
@@ -52,7 +53,7 @@ export default function VerifyEmail() {
             <p className="mt-2 text-gray-700 dark:text-gray-300">{message}</p>
             <button
               className="mt-6 px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate(ALIASES.LOGIN)}
             >
               Ir a iniciar sesión
             </button>
@@ -65,7 +66,7 @@ export default function VerifyEmail() {
             <p className="mt-2 text-gray-700 dark:text-gray-300">{message}</p>
             <button
               className="mt-6 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
-              onClick={() => navigate("/")}
+              onClick={() => navigate(ALIASES.HOME)}
             >
               Ir al inicio
             </button>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ChevronLeft } from "lucide-react"
 import { resetPassword } from "./authApi"
+import { ALIASES } from "@/constants/routeAliases"
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams()
@@ -40,7 +41,7 @@ export default function ResetPassword() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
       <div className="w-full max-w-md space-y-6">
         <div className="flex items-start">
-          <Link to="/login" className="text-gray-500 hover:text-gray-700 mt-2">
+          <Link to={ALIASES.LOGIN} className="text-gray-500 hover:text-gray-700 mt-2">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="flex-1 text-center">
@@ -123,14 +124,14 @@ export default function ResetPassword() {
 
         {isSuccess && (
           <div className="text-center mt-4 text-green-600">
-            Contraseña restablecida correctamente. <Link to="/login" className="font-medium underline">Iniciar sesión</Link>
+            Contraseña restablecida correctamente. <Link to={ALIASES.LOGIN} className="font-medium underline">Iniciar sesión</Link>
           </div>
         )}
 
         <div className="text-center mt-4">
           <p className="text-sm text-muted-foreground">
             ¿Recordaste tu contraseña?{" "}
-            <Link to="/login" className="text-green-500 hover:text-green-600 font-medium">
+            <Link to={ALIASES.LOGIN} className="text-green-500 hover:text-green-600 font-medium">
               Volver al inicio de sesión
             </Link>
           </p>

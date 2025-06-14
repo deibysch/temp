@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { User as UserIcon, Settings, LogOut } from 'lucide-react';
 import { logout } from '@/pages/auth/authApi'
+import { ALIASES } from "@/constants/routeAliases"
 
 interface UserAvatarProps {
   user: User;
@@ -27,7 +28,7 @@ export function UserAvatar({ user }: UserAvatarProps) {
     } catch (e) {
       
     }
-    navigate('/login');
+    navigate(ALIASES.LOGIN);
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -62,11 +63,11 @@ export function UserAvatar({ user }: UserAvatarProps) {
           </div>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate('/profile')}>
+        <DropdownMenuItem onClick={() => navigate(ALIASES.PROFILE)}>
           <UserIcon className="mr-2 h-4 w-4" />
           <span>Ver perfil</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate('/settings')}>
+        <DropdownMenuItem onClick={() => navigate(ALIASES.SU.SETTINGS)}>
           <Settings className="mr-2 h-4 w-4" />
           <span>Ajustes</span>
         </DropdownMenuItem>

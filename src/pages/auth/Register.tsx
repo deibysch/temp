@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ChevronLeft } from "lucide-react"
 import { register } from "./authApi"
+import { ALIASES } from "@/constants/routeAliases"
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -51,7 +52,7 @@ export default function Register() {
         phone_number: formData.phone_number,
         gender: formData.gender,
       })
-      navigate("/login")
+      navigate(ALIASES.LOGIN)
     } catch (err) {
     } finally {
       setLoading(false)
@@ -62,7 +63,7 @@ export default function Register() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
       <div className="w-full max-w-md space-y-6">
         <div className="flex items-start">
-          <Link to="/login" className="text-muted-foreground hover:text-gray-700 mt-2">
+          <Link to={ALIASES.LOGIN} className="text-muted-foreground hover:text-gray-700 mt-2">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="flex-1 text-center">
@@ -237,7 +238,7 @@ export default function Register() {
         <div className="text-center mt-4">
           <p className="text-sm text-muted-foreground">
             ¿Ya tienes una cuenta?{" "}
-            <Link to="/login" className="text-green-500 hover:text-green-600 font-medium">
+            <Link to={ALIASES.LOGIN} className="text-green-500 hover:text-green-600 font-medium">
               Iniciar Sesión
             </Link>
           </p>

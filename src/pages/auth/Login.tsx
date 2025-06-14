@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Eye, EyeOff } from "lucide-react"
 import { login } from "./authApi"
+import { ALIASES } from "@/constants/routeAliases"
 
 export default function Login() {
   const [email, setEmail] = useState("")
@@ -22,7 +23,7 @@ export default function Login() {
     try {
       const res = await login(email, password)
       if (res.token) {
-        navigate("/dashboard")
+        navigate(ALIASES.SU.DASHBOARD)
       }
     } catch (err) {
     } finally {
@@ -90,7 +91,7 @@ export default function Login() {
           </div>
 
           <div className="text-right">
-            <Link to="/forgot-password" className="text-sm text-green-500 hover:text-green-600">
+            <Link to={ALIASES.FORGOT_PASSWORD} className="text-sm text-green-500 hover:text-green-600">
               ¿Olvidaste tu contraseña?
             </Link>
           </div>
@@ -103,7 +104,7 @@ export default function Login() {
         <div className="text-center mt-4">
           <p className="text-sm text-muted-foreground">
             ¿No tienes una cuenta?{" "}
-            <Link to="/register" className="text-green-500 hover:text-green-600 font-medium">
+            <Link to={ALIASES.REGISTER} className="text-green-500 hover:text-green-600 font-medium">
               Regístrate
             </Link>
           </p>

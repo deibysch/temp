@@ -185,16 +185,24 @@ export default function Page() {
                   </Select>
                 </div>
               </div>
-              <CompanyFormDialog
-                open={isDialogOpen}
-                setOpen={setIsDialogOpen}
-                editingCompany={editingCompany}
-                setEditingCompany={setEditingCompany}
-                formData={formData}
-                setFormData={setFormData}
-                onSubmit={handleSubmit}
-                openAddDialog={openAddDialog}
-              />
+              <div className="flex gap-2">
+                <Button
+                  onClick={openAddDialog}
+                  className="bg-green-600 dark:bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-700"
+                >
+                  + Nueva Empresa
+                </Button>
+                <CompanyFormDialog
+                  open={isDialogOpen}
+                  setOpen={setIsDialogOpen}
+                  editingCompany={editingCompany}
+                  setEditingCompany={setEditingCompany}
+                  formData={formData}
+                  setFormData={setFormData}
+                  onSubmit={handleSubmit}
+                  openAddDialog={openAddDialog}
+                />
+              </div>
             </div>
 
             {/* Desktop Table */}

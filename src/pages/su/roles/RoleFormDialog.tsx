@@ -39,6 +39,8 @@ const RoleFormDialog: React.FC<Props> = ({
 }) => {
   const [permissions, setPermissions] = useState<Permission[]>([])
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([])
+  const [search, setSearch] = useState("")
+  const [viewMode, setViewMode] = useState<"alfabetico" | "accion" | "modulo">("modulo")
 
   useEffect(() => {
     if (open) {
@@ -76,10 +78,85 @@ const RoleFormDialog: React.FC<Props> = ({
     setEditingRole(null)
     setFormData({})
     setSelectedPermissions([])
+    setSearch("")
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     onSubmit(e, selectedPermissions)
+  }
+
+  // Agrupa permisos por las dos primeras partes del nombre
+  const groupedPermissions = permissions.reduce((acc, perm) => {
+    const parts = perm.name.split("_")
+    let groupKey = ""
+    if (parts.length >= 2) {
+      groupKey = parts[1] // agrupa por la segunda parte (ej: USUARIO, ROL, CATEGORIA, EMPRESA, etc)
+    } else {
+      groupKey = parts[0]
+    }
+    if (!acc[groupKey]) acc[groupKey] = []
+    acc[groupKey].push(perm)
+    return acc
+  }, {} as Record<string, Permission[]>)
+
+  // Filtra permisos por texto de búsqueda
+  const filterPermissions = (perms: Permission[]) =>
+    perms.filter((perm) =>
+      perm.name.toLowerCase().includes(search.toLowerCase())
+    )
+
+  // Helpers para seleccionar todos los permisos de un grupo
+  const isAllGroupSelected = (perms: Permission[]) =>
+    perms.every(perm => selectedPermissions.includes(perm.name))
+
+  const isSomeGroupSelected = (perms: Permission[]) =>
+    perms.some(perm => selectedPermissions.includes(perm.name)) &&
+    !isAllGroupSelected(perms)
+
+  const handleSelectAllGroup = (group: string, perms: Permission[], checked: boolean) => {
+    const permNames = perms.map(p => p.name)
+    if (checked) {
+      setSelectedPermissions(prev =>
+        Array.from(new Set([...prev, ...permNames]))
+      )
+    } else {
+      setSelectedPermissions(prev =>
+        prev.filter(p => !permNames.includes(p))
+      )
+    }
+  }
+
+  // Agrupadores
+  const groupByModulo = (perms: Permission[]) => {
+    return perms.reduce((acc, perm) => {
+      const parts = perm.name.split("_")
+      const groupKey = parts[1] || parts[0]
+      if (!acc[groupKey]) acc[groupKey] = []
+      acc[groupKey].push(perm)
+      return acc
+    }, {} as Record<string, Permission[]>)
+  }
+
+  const groupByAccion = (perms: Permission[]) => {
+    return perms.reduce((acc, perm) => {
+      const parts = perm.name.split("_")
+      const groupKey = parts[0]
+      if (!acc[groupKey]) acc[groupKey] = []
+      acc[groupKey].push(perm)
+      return acc
+    }, {} as Record<string, Permission[]>)
+  }
+
+  const groupAlfabetico = (perms: Permission[]) => {
+    // Un solo grupo, ordenado alfabéticamente
+    return { "TODOS": [...perms].sort((a, b) => a.name.localeCompare(b.name)) }
+  }
+
+  // Selección de agrupador según vista
+  const getGroupedPermissions = () => {
+    if (viewMode === "alfabetico") return groupAlfabetico(permissions)
+    if (viewMode === "accion") return groupByAccion(permissions)
+    return groupByModulo(permissions)
   }
 
   return (
@@ -115,19 +192,76 @@ const RoleFormDialog: React.FC<Props> = ({
           </div>
           <div>
             <Label>Permisos</Label>
-            <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto border rounded p-2 bg-gray-50 dark:bg-gray-900">
-              {permissions.map((perm) => (
-                <label key={perm.id} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={selectedPermissions.includes(perm.name)}
-                    onChange={() => handlePermissionChange(perm.name)}
-                  />
-                  {perm.name}
-                </label>
-              ))}
+            <Input
+              placeholder="Buscar permiso..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="mb-2"
+            />
+            <div className="mb-2 flex flex-wrap items-center gap-2 justify-end">
+              <span className="text-xs text-gray-500 mr-auto">Vista:</span>
+              <Button
+                type="button"
+                size="sm"
+                variant={viewMode === "modulo" ? "default" : "outline"}
+                onClick={() => setViewMode("modulo")}
+                className="px-3 py-1"
+              >
+                Por módulo
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant={viewMode === "accion" ? "default" : "outline"}
+                onClick={() => setViewMode("accion")}
+                className="px-3 py-1"
+              >
+                Por acción
+              </Button>
+            </div>
+            <div className="max-h-64 overflow-y-auto border rounded p-2 bg-gray-50 dark:bg-gray-900">
+              {Object.entries(
+                viewMode === "accion"
+                  ? groupByAccion(permissions)
+                  : groupByModulo(permissions)
+              ).map(([group, perms]) => {
+                const filtered = filterPermissions(perms)
+                if (filtered.length === 0) return null
+                const allSelected = isAllGroupSelected(filtered)
+                const someSelected = isSomeGroupSelected(filtered)
+                return (
+                  <div key={group} className="mb-2 border-b pb-2 last:border-b-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-semibold text-sm">{group}</span>
+                      <label className="flex items-center gap-2 text-xs select-none">
+                        <input
+                          type="checkbox"
+                          checked={allSelected}
+                          ref={el => {
+                            if (el) el.indeterminate = !allSelected && someSelected
+                          }}
+                          onChange={e => handleSelectAllGroup(group, filtered, e.target.checked)}
+                        />
+                        Todos
+                      </label>
+                    </div>
+                    <div className="flex flex-col gap-1 ml-2">
+                      {filtered.map((perm) => (
+                        <label key={perm.id} className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            checked={selectedPermissions.includes(perm.name)}
+                            onChange={() => handlePermissionChange(perm.name)}
+                          />
+                          {perm.name}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
               {permissions.length === 0 && (
-                <span className="text-xs text-gray-400 col-span-2">No hay permisos disponibles</span>
+                <span className="text-xs text-gray-400">No hay permisos disponibles</span>
               )}
             </div>
           </div>

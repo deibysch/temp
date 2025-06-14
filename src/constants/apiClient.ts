@@ -16,4 +16,6 @@ export const ENDPOINTS = {
   COMPANIES: API_BASE_URL+"/companies",
   DISCOUNTS: API_BASE_URL+"/discounts",
   USERS: API_BASE_URL+"/users",
+  ROLES: API_BASE_URL+"/roles",
+  PERMISSIONS: API_BASE_URL+"/permissions",
 }

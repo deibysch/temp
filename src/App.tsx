@@ -8,6 +8,7 @@ import DashboardFromSU from "./pages/su/Dashboard";
 import CategoriesFromSU from "./pages/su/categories/CategoriesPanel";
 import CompaniesFromSU from "./pages/su/companies/CompaniesPanel";
 import UsersFromSU from "./pages/su/users/UsersPanel";
+import RolesFromSU from "./pages/su/roles/RolesPage";
 import { Profile } from "./pages/auth/Profile";
 import { Toaster } from "./components/ui/toaster";
 import { useAuth } from "./hooks/useAuth";
@@ -51,6 +52,7 @@ function App() {
           <Route path={ALIASES.SU.CATEGORIES} element={<CategoriesFromSU />} />
           <Route path={ALIASES.SU.COMPANIES} element={<CompaniesFromSU />} />
           <Route path={ALIASES.SU.USERS} element={<UsersFromSU />} />
+          <Route path={ALIASES.SU.ROLES} element={<RolesFromSU />} />
           <Route path={ALIASES.PROFILE} element={<Profile />} />
           <Route path={ALIASES.SU.SETTINGS} element={<Settings />} />
           <Route path={ALIASES.SU.HELP} element={<Help />} />

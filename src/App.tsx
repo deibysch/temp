@@ -4,9 +4,10 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import Dashboard from "./pages/su/Dashboard";
-import Companies from "./pages/su/companies/CompaniesPanel";
-import Categories from "./pages/su/categories/CategoriesPanel";
+import DashboardFromSU from "./pages/su/Dashboard";
+import CategoriesFromSU from "./pages/su/categories/CategoriesPanel";
+import CompaniesFromSU from "./pages/su/companies/CompaniesPanel";
+import UsersFromSU from "./pages/su/users/UsersPanel";
 import { Profile } from "./pages/auth/Profile";
 import { Toaster } from "./components/ui/toaster";
 import { useAuth } from "./hooks/useAuth";
@@ -46,9 +47,10 @@ function App() {
           <Route path={ALIASES.RESET_PASSWORD} element={<ResetPassword />} />
         </Route>
         <Route element={<ProtectedRoute role="su" redirectPath={ALIASES.LOGIN} />}>
-          <Route path={ALIASES.SU.DASHBOARD} element={<Dashboard />} />
-          <Route path={ALIASES.SU.CATEGORIES} element={<Categories />} />
-          <Route path={ALIASES.SU.COMPANIES} element={<Companies />} />
+          <Route path={ALIASES.SU.DASHBOARD} element={<DashboardFromSU />} />
+          <Route path={ALIASES.SU.CATEGORIES} element={<CategoriesFromSU />} />
+          <Route path={ALIASES.SU.COMPANIES} element={<CompaniesFromSU />} />
+          <Route path={ALIASES.SU.USERS} element={<UsersFromSU />} />
           <Route path={ALIASES.PROFILE} element={<Profile />} />
           <Route path={ALIASES.SU.SETTINGS} element={<Settings />} />
           <Route path={ALIASES.SU.HELP} element={<Help />} />

@@ -73,10 +73,11 @@ export async function PATCH(url: string, data?: any, headers?: object) {
   );
 }
 
-export async function DELETE(url: string, headers?: object) {
+export async function DELETE(url: string, data?: any, headers?: object) {
   return handleResponse(
     axios.delete(url, {
       headers: { ...getAuthHeaders(), ...headers },
+      data: data,
     })
   );
 }

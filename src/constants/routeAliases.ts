@@ -12,6 +12,7 @@ export const ALIASES = {
     DASHBOARD: "/su/dashboard",
     CATEGORIES: "/su/categories",
     COMPANIES: "/su/companies",
+    USERS: "/su/users",
     SETTINGS: "/su/settings",
     HELP: "/su/help",
   }

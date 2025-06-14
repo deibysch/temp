@@ -15,4 +15,5 @@ export const ENDPOINTS = {
   CATEGORIES: API_BASE_URL+"/categories",
   COMPANIES: API_BASE_URL+"/companies",
   DISCOUNTS: API_BASE_URL+"/discounts",
+  USERS: API_BASE_URL+"/users",
 }

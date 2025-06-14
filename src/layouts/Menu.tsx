@@ -4,6 +4,7 @@ import {
   Settings,
   HelpCircle,
   Building2,
+  Users,
   GaugeCircle,
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
@@ -26,6 +27,7 @@ const menuSections = [
       { id: "dashboard", icon: GaugeCircle, label: "Dashboard", badge: null, path: ALIASES.SU.DASHBOARD },
       { id: "categories", icon: Package, label: "Categorias", badgeKey: "categoriesCount", path: ALIASES.SU.CATEGORIES },
       { id: "companies", icon: Building2, label: "Empresas", badgeKey: "companiesCount", path: ALIASES.SU.COMPANIES },
+      { id: "users", icon: Users, label: "Usuarios", badgeKey: "usersCount", path: ALIASES.SU.USERS },
     ],
   },
   {

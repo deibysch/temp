@@ -29,7 +29,7 @@ const menuSections = [
       { id: "dashboard", icon: GaugeCircle, label: "Dashboard", badge: null, path: ALIASES.SU.DASHBOARD },
       { id: "categories", icon: Package, label: "Categorias", badgeKey: "categoriesCount", path: ALIASES.SU.CATEGORIES },
       { id: "companies", icon: Building2, label: "Empresas", badgeKey: "companiesCount", path: ALIASES.SU.COMPANIES },
-      { id: "roles", icon: Settings, label: "Roles", badgeKey: "rolesCount", path: ALIASES.SU.ROLES }, // Nuevo ítem
+      { id: "roles", icon: Settings, label: "Roles", badgeKey: "rolesCount", path: ALIASES.SU.ROLES },
       { id: "users", icon: Users, label: "Usuarios", badgeKey: "usersCount", path: ALIASES.SU.USERS },
     ],
   },
@@ -81,7 +81,7 @@ export default function MenuSidebar({
                 if (item.badgeKey === "companiesCount") badge = companiesCount?.toString()
                 if (item.badgeKey === "categoriesCount") badge = categoriesCount?.toString()
                 if (item.badgeKey === "rolesCount") badge = rolesCount?.toString()
-                if (item.badgeKey === "userCount") badge = usersCount?.toString()
+                if (item.badgeKey === "usersCount") badge = usersCount?.toString()
                 return (
                   <button
                     key={item.id}

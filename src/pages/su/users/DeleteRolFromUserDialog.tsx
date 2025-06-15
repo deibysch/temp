@@ -1,37 +1,40 @@
 import React from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import type { Category } from "@/types/categories"
 
 interface Props {
   open: boolean
   setOpen: (open: boolean) => void
-  category: Category | null
+  roleName: string | null
+  companyName: string | null
   onConfirm: () => void
 }
 
-const CategoryDeleteDialog: React.FC<Props> = ({
+const DeleteRolFromUserDialog: React.FC<Props> = ({
   open,
   setOpen,
-  category,
+  roleName,
+  companyName,
   onConfirm,
 }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md w-[calc(100%-2rem)] mx-auto" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>Eliminar Categoría</DialogTitle>
+          <DialogTitle>Quitar rol del usuario</DialogTitle>
         </DialogHeader>
         <div className="py-2">
-          ¿Estás seguro que deseas eliminar la categoría{" "}
-          <span className="font-semibold">{category?.name}</span>?
+          ¿Estás seguro que deseas quitar el rol{" "}
+          <span className="font-semibold">{roleName}</span>
+          {" de "}
+          <span className="font-semibold">{companyName}</span>?
         </div>
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancelar
           </Button>
           <Button variant="destructive" onClick={onConfirm}>
-            Eliminar
+            Quitar
           </Button>
         </div>
       </DialogContent>
@@ -39,4 +42,4 @@ const CategoryDeleteDialog: React.FC<Props> = ({
   )
 }
 
-export default CategoryDeleteDialog
+export default DeleteRolFromUserDialog

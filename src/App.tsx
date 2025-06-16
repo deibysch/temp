@@ -47,7 +47,7 @@ function App() {
           <Route path={ALIASES.FORGOT_PASSWORD} element={<ForgotPassword />} />
           <Route path={ALIASES.RESET_PASSWORD} element={<ResetPassword />} />
         </Route>
-        <Route element={<ProtectedRoute role="su" redirectPath={ALIASES.LOGIN} />}>
+        <Route element={<ProtectedRoute role="SUPER_USER" redirectPath={ALIASES.LOGIN} />}>
           <Route path={ALIASES.SU.DASHBOARD} element={<DashboardFromSU />} />
           <Route path={ALIASES.SU.CATEGORIES} element={<CategoriesFromSU />} />
           <Route path={ALIASES.SU.COMPANIES} element={<CompaniesFromSU />} />

@@ -73,18 +73,17 @@ export default function Page() {
   }, [userSearchTerm])
 
   const fetchUsers = async () => {
-    const data = await usersApi.getUsersWithRoles()
-    setUsers(data)
+      const data = await usersApi.getUsersWithRoles() as UserWithRoles[]
+      setUsers(data)
   }
 
   const fetchRoles = async () => {
     const data = await rolesApi.getRoles()
-    setAllRoles(data)
+    setAllRoles(data as RoleOption[])
   }
 
   const fetchCompanies = async () => {
-    const data = await companiesApi.getCompanies()
-    // Si la respuesta es un array de empresas con id y name:
+    const data = await companiesApi.getCompanies() as CompanyOption[]
     setAllCompanies(data)
   }
 

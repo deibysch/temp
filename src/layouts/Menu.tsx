@@ -16,10 +16,10 @@ type MenuSidebarProps = {
   setSidebarOpen: (open: boolean) => void
   activeSection: string
   setActiveSection: (section: string) => void
-  companiesCount: number
-  categoriesCount: number
-  rolesCount: number
-  usersCount: number
+  companiesCount?: number
+  categoriesCount?: number
+  rolesCount?: number
+  usersCount?: number
 }
 
 const menuSections = [

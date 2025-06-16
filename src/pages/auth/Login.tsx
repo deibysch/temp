@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Eye, EyeOff } from "lucide-react"
 import { login } from "./authApi"
 import { ALIASES } from "@/constants/routeAliases"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function Login() {
   const [email, setEmail] = useState("")
@@ -16,6 +17,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const { getRedirectPathForRole } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,7 +25,7 @@ export default function Login() {
     try {
       const res = await login(email, password)
       if (res.token) {
-        navigate(ALIASES.SU.DASHBOARD)
+        navigate(getRedirectPathForRole(), { replace: true })
       }
     } catch (err) {
     } finally {

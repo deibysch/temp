@@ -29,7 +29,7 @@ function AuthRedirect() {
   const { getRedirectPathForRole } = useAuth();
   const path = getRedirectPathForRole();
   if (path!=""){
-    return <Navigate to={getRedirectPathForRole()} replace />;
+    return <Navigate to={path} replace />;
   }
   else{
     return <Outlet />;

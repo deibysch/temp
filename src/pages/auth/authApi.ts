@@ -5,12 +5,19 @@ import { showSuccessToast, showInfoToast } from "@/lib/toast-utils";
 export async function login(email: string, password: string) {
   const loading = showInfoToast("Iniciando sesión...", "Por favor espera");
   try {
-    const res = await POST(ENDPOINTS.LOGIN, { email, password });
+    type LoginResponse = {
+      message: string;
+      token: string;
+      user: any;
+      roles_by_company: Record<string, string[]>;
+      permissions_by_company: Record<string, string[]>;
+    };
+    const res = await POST(ENDPOINTS.LOGIN, { email, password }) as LoginResponse;
     if (res.token) {
       localStorage.setItem("token", res.token);
       localStorage.setItem("user", JSON.stringify(res.user));
-      localStorage.setItem("roles", JSON.stringify(res.roles));
-      localStorage.setItem("permissions", JSON.stringify(res.permissions));
+      localStorage.setItem("rolesByCompany", JSON.stringify(res.roles_by_company));
+      localStorage.setItem("permissionsByCompany", JSON.stringify(res.permissions_by_company));
       showSuccessToast("¡Bienvenido!", "Has iniciado sesión correctamente");
     }
     return res;
@@ -51,8 +58,8 @@ export async function logout() {
     const res = await POST(ENDPOINTS.LOGOUT, {});
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    localStorage.removeItem("roles");
-    localStorage.removeItem("permissions");
+    localStorage.removeItem("rolesByCompany");
+    localStorage.removeItem("permissionsByCompany");
     showSuccessToast("Sesión cerrada", "Has cerrado sesión correctamente");
     return res;
   } catch (error) {

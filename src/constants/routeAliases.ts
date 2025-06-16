@@ -4,8 +4,6 @@ export const ALIASES = {
   LOGIN: "/login",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
-
-  PROFILE: "/profile",
   VERIFY_EMAIL_LINK: "/verify-email",
 
   SU: {
@@ -14,7 +12,17 @@ export const ALIASES = {
     COMPANIES: "/su/companies",
     USERS: "/su/users",
     ROLES: "/su/roles",
+    PROFILE: "/su/profile",
     SETTINGS: "/su/settings",
     HELP: "/su/help",
+  },
+
+  ADMIN: {
+    DASHBOARD: "/admin/dashboard",
+    PRODUCTS: "/admin/products",
+    USERS: "/admin/users",
+    PROFILE: "/admin/profile",
+    SETTINGS: "/admin/settings",
+    HELP: "/admin/help",
   }
 };

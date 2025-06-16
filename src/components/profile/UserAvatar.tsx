@@ -63,7 +63,7 @@ export function UserAvatar({ user }: UserAvatarProps) {
           </div>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate(ALIASES.PROFILE)}>
+        <DropdownMenuItem onClick={() => navigate(ALIASES.SU.PROFILE)}>
           <UserIcon className="mr-2 h-4 w-4" />
           <span>Ver perfil</span>
         </DropdownMenuItem>

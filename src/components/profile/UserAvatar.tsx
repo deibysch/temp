@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { User } from '@/types/user';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import {
@@ -19,7 +19,35 @@ interface UserAvatarProps {
 
 export function UserAvatar({ user }: UserAvatarProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
+
+  // Obtener empresas del usuario desde localStorage (nueva estructura)
+  const companiesStr = localStorage.getItem("companies");
+  let companies: { id: string; name: string; photo_url: string; roles: string[] }[] = [];
+  if (companiesStr) {
+    companies = JSON.parse(companiesStr);
+  }
+
+  // Detectar empresa seleccionada según la URL
+  const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Buscar el companyId en la url tipo /business/:companyId/...
+    const match = location.pathname.match(/\/business\/(\d+)/);
+    if (match) {
+      const companyId = match[1];
+      const exists = companies.some(c => String(c.id) === companyId);
+      if (exists) {
+        setSelectedCompanyId(companyId);
+        return;
+      }
+    }
+    // Si no hay match o no existe, seleccionar la primera (en caso SU)
+    if (companies.length > 0) {
+      setSelectedCompanyId(String(companies[0].id));
+    }
+  }, [location.pathname, companiesStr]);
 
   const handleLogout = async () => {
     setOpen(false);
@@ -58,12 +86,33 @@ export function UserAvatar({ user }: UserAvatarProps) {
       <DropdownMenuContent align="end" className="w-56">
         <div className="flex items-center justify-start gap-2 p-2">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.name}</p>
+            <p className="text-sm font-medium leading-none truncate" title={user.name}>{user.name}</p>
             <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
           </div>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate(ALIASES.SU.PROFILE)}>
+        <div className="px-2 py-1 text-xs text-muted-foreground">Empresas</div>
+        {companies.map(company => (
+          <DropdownMenuItem
+            key={company.id}
+            onClick={() => {
+              navigate(ALIASES.ADMIN.DASHBOARD.replace(":companyId", company.id));
+              setOpen(false);
+            }}
+            className={selectedCompanyId === String(company.id) ? "bg-emerald-100 dark:bg-emerald-900/30" : ""}
+          >
+            {company.photo_url && (
+              <img
+                src={company.photo_url}
+                alt={company.name}
+                className="w-5 h-5 rounded-full mr-2 object-cover"
+              />
+            )}
+            <span className="truncate" title={company.name}>{company.name || `Empresa #${company.id}`}</span>
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate(ALIASES.PROFILE)}>
           <UserIcon className="mr-2 h-4 w-4" />
           <span>Ver perfil</span>
         </DropdownMenuItem>

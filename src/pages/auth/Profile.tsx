@@ -21,6 +21,7 @@ import {
   EyeOff,
   CheckCircle,
   AlertCircle,
+  ChevronDown,
 } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 import { useNavigate } from "react-router-dom"
@@ -31,8 +32,13 @@ import { ALIASES } from "@/constants/routeAliases"
 
 interface UserData {
   user: User
-  roles: string[]
-  permissions: string[]
+  companies: Array<{
+    id: number | null
+    name: string | null
+    photo_url: string | null
+    roles: string[]
+    Permissions: string[]
+  }>
 }
 
 interface PasswordChangeInput {
@@ -57,6 +63,7 @@ export function Profile() {
     confirm: false,
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(null);
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -70,8 +77,7 @@ export function Profile() {
 
       const userDataFromApi: UserData = {
         user: res.user,
-        roles: res.roles || [],
-        permissions: res.permissions || [],
+        companies: res.companies || [],
       }
 
       setUserData(userDataFromApi)
@@ -250,6 +256,11 @@ export function Profile() {
     }
   }
 
+  // Encuentra la empresa seleccionada
+  const selectedCompany = userData?.companies.find(
+    (c) => c.id === selectedCompanyId
+  ) || userData?.companies[0];
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br dark:bg-gray-900">
@@ -319,15 +330,6 @@ export function Profile() {
                       <AlertCircle className="h-3 w-3 ml-1 text-orange-500" />
                     )}
                   </Badge>
-                  {userData?.roles.map((role) => (
-                    <Badge
-                      key={role}
-                      variant="outline"
-                      className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-                    >
-                      {role}
-                    </Badge>
-                  ))}
                 </div>
 
                 {/* Email Verification */}
@@ -513,27 +515,68 @@ export function Profile() {
 
                 <Separator />
 
+                {/* Empresas */}
                 <div>
-                  <p className="text-gray-500 dark:text-white text-sm font-medium">Roles</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {userData?.roles.map((role) => (
-                      <Badge key={role} variant="outline" className="bg-blue-50 text-blue-700">
-                        {role}
-                      </Badge>
+                  <p className="text-gray-500 dark:text-white text-sm font-medium mb-1">Empresas</p>
+                  <div className="flex flex-col gap-2">
+                    {userData?.companies.map((company) => (
+                      <button
+                        key={company.id}
+                        type="button"
+                        className={`flex gap-2 px-3 py-2 rounded transition-colors ${
+                          selectedCompany?.id === company.id
+                            ? "bg-emerald-100 dark:bg-emerald-900/30"
+                            : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                        }`}
+                        onClick={() => setSelectedCompanyId(company.id)}
+                      >
+                        {company.photo_url && (
+                          <img
+                            src={company.photo_url}
+                            alt={company.name || ""}
+                            className="w-6 h-6 rounded-full object-cover"
+                          />
+                        )}
+                        <span className="font-medium text-start">{company.name || `Empresa #${company.id}`}</span>
+                      </button>
                     ))}
                   </div>
                 </div>
 
-                <div>
-                  <p className="text-gray-500 dark:text-white text-sm font-medium">Permisos</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {userData?.permissions.map((permission) => (
-                      <Badge key={permission} variant="outline" className="bg-gray-50 text-gray-700">
-                        {permission}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
+                {/* Roles y permisos de la empresa seleccionada */}
+                {selectedCompany && (
+                  <>
+                    <Separator />
+                    <div>
+                      <p className="text-gray-500 dark:text-white text-sm font-medium">Roles</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {selectedCompany.roles.length > 0 ? (
+                          selectedCompany.roles.map((role) => (
+                            <Badge key={role} variant="outline" className="bg-blue-50 text-blue-700">
+                              {role}
+                            </Badge>
+                          ))
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Sin roles</span>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 dark:text-white text-sm font-medium">Permisos</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {selectedCompany.Permissions.length > 0 ? (
+                          selectedCompany.Permissions.map((permission) => (
+                            <Badge key={permission} variant="outline" className="bg-gray-50 text-gray-700">
+                              {permission}
+                            </Badge>
+                          ))
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Sin permisos</span>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
 

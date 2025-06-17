@@ -4,46 +4,40 @@ import { ALIASES } from "@/constants/routeAliases";
 
 export function useAuth() {
   const token = () => localStorage.getItem("token");
-  const rolesByCompany = () => localStorage.getItem("rolesByCompany");
+  const companies = () => {
+    const str = localStorage.getItem("companies");
+    return str ? JSON.parse(str) : [];
+  };
 
-  const isAuthenticated = useMemo(() => !!token, [token]);
+  const isAuthenticated = () => token()!=null;
 
   const hasAnyRole = useMemo(
     () => (roleOrRoles: string) => {
-      if (!isAuthenticated || !rolesByCompany()) return false;
-      let parsedRoles = JSON.parse(rolesByCompany()||"[]");
+      if (!isAuthenticated) return false;
+      const companiesArr = companies();
       let requiredRoles = roleOrRoles.split(",").map((r) => r.trim());
-
-      return requiredRoles.some((r) => {
-        // console.log("Verificando rol:", r, "dentro de rolesByCompany:", parsedRoles);
-        for (let role in parsedRoles) {
-          if (parsedRoles[role].includes(r)) {
-            console.log("Role Encontrado:", r);
-            return true;
-          }
-        }
-      });
+      return companiesArr.some((company: any) =>
+        company.roles && requiredRoles.some((r: string) => company.roles.includes(r))
+      );
     },
-    [rolesByCompany()]
+    [companies()]
   );
 
   const getAdminCompanyId = () => {
     // Primero intenta obtenerlo de localStorage
     const stored = localStorage.getItem("adminCompanyId");
     if (stored) return stored;
-    // Si no existe, intenta calcularlo desde rolesByCompany
-    const rolesStr = rolesByCompany();
-    if (!rolesStr) return "";
-    const parsed = JSON.parse(rolesStr);
-    return Object.keys(parsed).find(cid => parsed[cid].includes("ADMIN_EMPRESA")) || "";
+    // Si no existe, intenta calcularlo desde companies
+    const companiesArr = companies();
+    const adminCompany = companiesArr.find((c: any) => c.roles.includes("ADMIN_EMPRESA"));
+    return adminCompany && adminCompany.id ? adminCompany.id.toString() : "";
   };
 
   const getRedirectPathForRole = () => {
-    // console.log("getRedirectPathForRole",isAuthenticated, rolesByCompany());
-    if (!isAuthenticated || !rolesByCompany()) return "";
+    if (!isAuthenticated) return "";
 
-    if(hasAnyRole("SUPER_USUARIO")) return ALIASES.SU.DASHBOARD;
-    else if(hasAnyRole("ADMIN_EMPRESA")) {
+    if (hasAnyRole("SUPER_USUARIO")) return ALIASES.SU.DASHBOARD;
+    else if (hasAnyRole("ADMIN_EMPRESA")) {
       const companyId = getAdminCompanyId();
       if (companyId) {
         return ALIASES.ADMIN.DASHBOARD.replace(":companyId", companyId);

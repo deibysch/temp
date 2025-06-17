@@ -42,6 +42,7 @@ function App() {
       <Routes>
         <Route path={ALIASES.HOME} element={<Home />} />
         <Route path={`${ALIASES.VERIFY_EMAIL_LINK}/:id/:hash`} element={<VerifyEmail />} />
+        <Route path={ALIASES.PROFILE} element={<Profile />} />
         <Route element={<AuthRedirect />}>
           <Route path={ALIASES.LOGIN} element={<Login />} />
           <Route path={ALIASES.REGISTER} element={<Register />} />
@@ -54,14 +55,12 @@ function App() {
           <Route path={ALIASES.SU.COMPANIES} element={<CompaniesFromSU />} />
           <Route path={ALIASES.SU.USERS} element={<UsersFromSU />} />
           <Route path={ALIASES.SU.ROLES} element={<RolesFromSU />} />
-          <Route path={ALIASES.SU.PROFILE} element={<Profile />} />
           <Route path={ALIASES.SU.SETTINGS} element={<Settings />} />
           <Route path={ALIASES.SU.HELP} element={<Help />} />
         </Route>
         <Route element={<ProtectedRoute role="ADMIN_EMPRESA" redirectPath={ALIASES.LOGIN} />}>
           <Route path={ALIASES.ADMIN.DASHBOARD} element={<DashboardFromSU />} />
           <Route path={ALIASES.ADMIN.USERS} element={<UsersFromSU />} />
-          <Route path={ALIASES.ADMIN.PROFILE} element={<Profile />} />
           <Route path={ALIASES.ADMIN.SETTINGS} element={<Settings />} />
           <Route path={ALIASES.ADMIN.HELP} element={<Help />} />
         </Route>

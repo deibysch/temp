@@ -9,22 +9,27 @@ export async function login(email: string, password: string) {
       message: string;
       token: string;
       user: any;
-      roles_by_company: Record<string, string[]>;
-      permissions_by_company: Record<string, string[]>;
+      companies: Array<{
+        id: number | null;
+        name: string | null;
+        photo_url: string | null;
+        roles: string[];
+        Permissions: string[];
+      }>;
     };
     const res = await POST(ENDPOINTS.LOGIN, { email, password }) as LoginResponse;
     if (res.token) {
       localStorage.setItem("token", res.token);
       localStorage.setItem("user", JSON.stringify(res.user));
-      localStorage.setItem("rolesByCompany", JSON.stringify(res.roles_by_company));
-      localStorage.setItem("permissionsByCompany", JSON.stringify(res.permissions_by_company));
+      localStorage.setItem("companies", JSON.stringify(res.companies || []));
       // Guardar companyId principal si existe ADMIN_EMPRESA
-      const rolesByCompany = res.roles_by_company || {};
-      let adminCompanyId = Object.keys(rolesByCompany).find(cid =>
-        rolesByCompany[cid].includes("ADMIN_EMPRESA")
-      );
-      if (adminCompanyId) {
-        localStorage.setItem("adminCompanyId", adminCompanyId);
+      let adminCompanyId = "";
+      if (res.companies && Array.isArray(res.companies)) {
+        const adminCompany = res.companies.find(c => c.roles.includes("ADMIN_EMPRESA"));
+        if (adminCompany && adminCompany.id) {
+          adminCompanyId = adminCompany.id.toString();
+          localStorage.setItem("adminCompanyId", adminCompanyId);
+        }
       }
       showSuccessToast("¡Bienvenido!", "Has iniciado sesión correctamente");
     }
@@ -66,8 +71,8 @@ export async function logout() {
     const res = await POST(ENDPOINTS.LOGOUT, {});
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    localStorage.removeItem("rolesByCompany");
-    localStorage.removeItem("permissionsByCompany");
+    localStorage.removeItem("companies");
+    localStorage.removeItem("adminCompanyId");
     showSuccessToast("Sesión cerrada", "Has cerrado sesión correctamente");
     return res;
   } catch (error) {

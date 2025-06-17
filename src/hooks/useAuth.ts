@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { ALIASES } from "@/constants/routeAliases";
 
 
@@ -11,17 +10,14 @@ export function useAuth() {
 
   const isAuthenticated = () => token()!=null;
 
-  const hasAnyRole = useMemo(
-    () => (roleOrRoles: string) => {
-      if (!isAuthenticated) return false;
-      const companiesArr = companies();
-      let requiredRoles = roleOrRoles.split(",").map((r) => r.trim());
-      return companiesArr.some((company: any) =>
-        company.roles && requiredRoles.some((r: string) => company.roles.includes(r))
-      );
-    },
-    [companies()]
-  );
+  const hasAnyRole = (roleOrRoles: string) => {
+    if (!isAuthenticated()) return false;
+    const companiesArr = companies();
+    let requiredRoles = roleOrRoles.split(",").map((r) => r.trim());
+    return companiesArr.some((company: any) =>
+      company.roles && requiredRoles.some((r: string) => company.roles.includes(r))
+    );
+  };
 
   const getAdminCompanyId = () => {
     // Primero intenta obtenerlo de localStorage
@@ -34,7 +30,7 @@ export function useAuth() {
   };
 
   const getRedirectPathForRole = () => {
-    if (!isAuthenticated) return "";
+    if (!isAuthenticated()) return "";
 
     if (hasAnyRole("SUPER_USUARIO")) return ALIASES.SU.DASHBOARD;
     else if (hasAnyRole("ADMIN_EMPRESA")) {

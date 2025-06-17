@@ -18,11 +18,11 @@ export const ALIASES = {
   },
 
   ADMIN: {
-    DASHBOARD: "/admin/dashboard",
-    PRODUCTS: "/admin/products",
-    USERS: "/admin/users",
-    PROFILE: "/admin/profile",
-    SETTINGS: "/admin/settings",
-    HELP: "/admin/help",
+    DASHBOARD: "/admin/:companyId/dashboard",
+    PRODUCTS: "/admin/:companyId/products",
+    USERS: "/admin/:companyId/users",
+    PROFILE: "/admin/:companyId/profile",
+    SETTINGS: "/admin/:companyId/settings",
+    HELP: "/admin/:companyId/help",
   }
 };

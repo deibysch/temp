@@ -61,7 +61,7 @@ function App() {
         <Route element={<ProtectedRoute role="ADMIN_EMPRESA" redirectPath={ALIASES.LOGIN} />}>
           <Route path={ALIASES.ADMIN.DASHBOARD} element={<DashboardFromSU />} />
           <Route path={ALIASES.ADMIN.USERS} element={<UsersFromSU />} />
-          <Route path={ALIASES.SU.PROFILE} element={<Profile />} />
+          <Route path={ALIASES.ADMIN.PROFILE} element={<Profile />} />
           <Route path={ALIASES.ADMIN.SETTINGS} element={<Settings />} />
           <Route path={ALIASES.ADMIN.HELP} element={<Help />} />
         </Route>

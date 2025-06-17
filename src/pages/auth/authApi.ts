@@ -18,6 +18,14 @@ export async function login(email: string, password: string) {
       localStorage.setItem("user", JSON.stringify(res.user));
       localStorage.setItem("rolesByCompany", JSON.stringify(res.roles_by_company));
       localStorage.setItem("permissionsByCompany", JSON.stringify(res.permissions_by_company));
+      // Guardar companyId principal si existe ADMIN_EMPRESA
+      const rolesByCompany = res.roles_by_company || {};
+      let adminCompanyId = Object.keys(rolesByCompany).find(cid =>
+        rolesByCompany[cid].includes("ADMIN_EMPRESA")
+      );
+      if (adminCompanyId) {
+        localStorage.setItem("adminCompanyId", adminCompanyId);
+      }
       showSuccessToast("¡Bienvenido!", "Has iniciado sesión correctamente");
     }
     return res;

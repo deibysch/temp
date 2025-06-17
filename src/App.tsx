@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { ALIASES } from "./constants/routeAliases";
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -9,13 +10,14 @@ import CategoriesFromSU from "./pages/su/categories/CategoriesPage";
 import CompaniesFromSU from "./pages/su/companies/CompaniesPage";
 import UsersFromSU from "./pages/su/users/UsersPage";
 import RolesFromSU from "./pages/su/roles/RolesPage";
+import SettingsFromSu from "./pages/su/Settings";
 import { Profile } from "./pages/auth/Profile";
 import { Toaster } from "./components/ui/toaster";
 import { useAuth } from "./hooks/useAuth";
 import VerifyEmail from "./pages/auth/VerifyEmailLink";
-import Settings from "./pages/su/Settings";
-import Help from "./pages/su/Help";
-import { ALIASES } from "./constants/routeAliases";
+import HelpFromTenant from "./pages/tenant/Help";
+import SettingsFromTenant from "./pages/tenant/Settings";
+import DashboardFromTenant from "./pages/tenant/Dashboard";
 
 function ProtectedRoute({ role, redirectPath = ALIASES.LOGIN }: { role: string, redirectPath?: string }) {
   const { hasAnyRole } = useAuth();
@@ -55,14 +57,13 @@ function App() {
           <Route path={ALIASES.SU.COMPANIES} element={<CompaniesFromSU />} />
           <Route path={ALIASES.SU.USERS} element={<UsersFromSU />} />
           <Route path={ALIASES.SU.ROLES} element={<RolesFromSU />} />
-          <Route path={ALIASES.SU.SETTINGS} element={<Settings />} />
-          <Route path={ALIASES.SU.HELP} element={<Help />} />
+          <Route path={ALIASES.SU.SETTINGS} element={<SettingsFromSu />} />
         </Route>
-        <Route element={<ProtectedRoute role="ADMIN_EMPRESA" redirectPath={ALIASES.LOGIN} />}>
-          <Route path={ALIASES.ADMIN.DASHBOARD} element={<DashboardFromSU />} />
+        <Route element={<ProtectedRoute role="ADMIN_EMPRESA,SECRETARIA" redirectPath={ALIASES.LOGIN} />}>
+          <Route path={ALIASES.ADMIN.DASHBOARD} element={<DashboardFromTenant />} />
           <Route path={ALIASES.ADMIN.USERS} element={<UsersFromSU />} />
-          <Route path={ALIASES.ADMIN.SETTINGS} element={<Settings />} />
-          <Route path={ALIASES.ADMIN.HELP} element={<Help />} />
+          <Route path={ALIASES.ADMIN.SETTINGS} element={<SettingsFromTenant />} />
+          <Route path={ALIASES.ADMIN.HELP} element={<HelpFromTenant />} />
         </Route>
       </Routes>
       <Toaster />

@@ -14,7 +14,6 @@ export const ALIASES = {
     USERS: "/su/users",
     ROLES: "/su/roles",
     SETTINGS: "/su/settings",
-    HELP: "/su/help",
   },
 
   ADMIN: {

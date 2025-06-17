@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Search, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
 import type { Company } from "@/types/companies"
 import { toast } from "@/components/ui/use-toast"
-import MenuSidebar from "@/layouts/Menu"
+import MenuSidebar from "@/layouts/MenuSU"
 import * as companiesApi from "./companiesApi"
 import CompanyFormDialog from "./CompanyFormDialog"
 import CompanyDeleteDialog from "./CompanyDeleteDialog"

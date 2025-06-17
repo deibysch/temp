@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Header from "@/layouts/Header"
-import MenuSidebar from "@/layouts/MenuSU"
+import MenuSidebar from "@/layouts/MenuBusiness"
 
 
 export default function Settings() {

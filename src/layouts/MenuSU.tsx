@@ -36,8 +36,7 @@ const menuSections = [
   {
     title: "Configuración",
     items: [
-      { id: "settings", icon: Settings, label: "Ajustes", badge: null, path: ALIASES.SU.SETTINGS },
-      { id: "help", icon: HelpCircle, label: "Ayuda", badge: null, path: ALIASES.SU.HELP },
+      { id: "settings", icon: Settings, label: "Ajustes", badge: null, path: ALIASES.SETTINGS },
     ],
   },
 ]

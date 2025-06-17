@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Header from "@/layouts/Header";
-import MenuSidebar from "@/layouts/MenuSU";
+import MenuSidebar from "@/layouts/MenuBusiness";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useTheme } from "@/components/theme-provider";

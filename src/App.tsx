@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet, useParams } from "react-router-dom";
 import { ALIASES } from "./constants/routeAliases";
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
@@ -19,9 +19,19 @@ import HelpFromTenant from "./pages/tenant/Help";
 import SettingsFromTenant from "./pages/tenant/Settings";
 import DashboardFromTenant from "./pages/tenant/Dashboard";
 
-function ProtectedRoute({ role, redirectPath = ALIASES.LOGIN }: { role: string, redirectPath?: string }) {
-  const { hasAnyRole } = useAuth();
-  if (!hasAnyRole(role)) {
+function ProtectedRouteForAdminBusiness({ redirectPath }: { redirectPath: string }) {
+  const { userHasBusinessLevelRoleFor } = useAuth();
+  const params = useParams();
+  const companyId = Number(params.companyId);
+  if (!userHasBusinessLevelRoleFor(companyId)) {
+    return <Navigate to={redirectPath} replace />;
+  }
+  return <Outlet />;
+}
+
+function ProtectedRoutedForDeveloper({ redirectPath }: { redirectPath: string }) {
+  const { getRolesDeveloper } = useAuth();
+  if (getRolesDeveloper().length == 0) {
     return <Navigate to={redirectPath} replace />;
   }
   return <Outlet />;
@@ -51,7 +61,7 @@ function App() {
           <Route path={ALIASES.FORGOT_PASSWORD} element={<ForgotPassword />} />
           <Route path={ALIASES.RESET_PASSWORD} element={<ResetPassword />} />
         </Route>
-        <Route element={<ProtectedRoute role="SUPER_USUARIO" redirectPath={ALIASES.LOGIN} />}>
+        <Route element={<ProtectedRoutedForDeveloper redirectPath={ALIASES.LOGIN} />}>
           <Route path={ALIASES.SU.DASHBOARD} element={<DashboardFromSU />} />
           <Route path={ALIASES.SU.CATEGORIES} element={<CategoriesFromSU />} />
           <Route path={ALIASES.SU.COMPANIES} element={<CompaniesFromSU />} />
@@ -59,7 +69,7 @@ function App() {
           <Route path={ALIASES.SU.ROLES} element={<RolesFromSU />} />
           <Route path={ALIASES.SU.SETTINGS} element={<SettingsFromSu />} />
         </Route>
-        <Route element={<ProtectedRoute role="ADMIN_EMPRESA,SECRETARIA" redirectPath={ALIASES.LOGIN} />}>
+        <Route element={<ProtectedRouteForAdminBusiness redirectPath={ALIASES.LOGIN} />}>
           <Route path={ALIASES.ADMIN.DASHBOARD} element={<DashboardFromTenant />} />
           <Route path={ALIASES.ADMIN.USERS} element={<UsersFromSU />} />
           <Route path={ALIASES.ADMIN.SETTINGS} element={<SettingsFromTenant />} />

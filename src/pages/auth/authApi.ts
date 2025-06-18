@@ -22,15 +22,6 @@ export async function login(email: string, password: string) {
       localStorage.setItem("token", res.token);
       localStorage.setItem("user", JSON.stringify(res.user));
       localStorage.setItem("companies", JSON.stringify(res.companies || []));
-      // Guardar companyId principal si existe ADMIN_EMPRESA
-      let adminCompanyId = "";
-      if (res.companies && Array.isArray(res.companies)) {
-        const adminCompany = res.companies.find(c => c.roles.includes("ADMIN_EMPRESA"));
-        if (adminCompany && adminCompany.id) {
-          adminCompanyId = adminCompany.id.toString();
-          localStorage.setItem("adminCompanyId", adminCompanyId);
-        }
-      }
       showSuccessToast("¡Bienvenido!", "Has iniciado sesión correctamente");
     }
     return res;
@@ -72,7 +63,6 @@ export async function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("companies");
-    localStorage.removeItem("adminCompanyId");
     showSuccessToast("Sesión cerrada", "Has cerrado sesión correctamente");
     return res;
   } catch (error) {

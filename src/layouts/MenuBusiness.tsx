@@ -1,11 +1,9 @@
 import { Badge } from "@/components/ui/badge"
 import {
-  Package,
   Settings,
   HelpCircle,
-  Building2,
-  Users,
   GaugeCircle,
+  Package,
 } from "lucide-react"
 import { useNavigate, useParams } from "react-router-dom"
 import { ALIASES } from "@/constants/routeAliases";
@@ -35,7 +33,7 @@ export default function MenuSidebar({
       title: "Principal",
       items: [
         { id: "dashboard", icon: GaugeCircle, label: "Dashboard", badge: null, path: ALIASES.ADMIN.DASHBOARD.replace(":companyId", companyId || "") },
-        { id: "users", icon: Users, label: "Usuarios", badgeKey: "usersCount", path: ALIASES.ADMIN.USERS.replace(":companyId", companyId || "") },
+        { id: "products", icon: Package, label: "Productos", badgeKey: "productsCount", path: ALIASES.ADMIN.USERS.replace(":companyId", companyId || "") },
       ],
     },
     {

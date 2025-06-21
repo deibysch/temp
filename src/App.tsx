@@ -18,6 +18,7 @@ import VerifyEmail from "./pages/auth/VerifyEmailLink";
 import HelpFromTenant from "./pages/tenant/Help";
 import SettingsFromTenant from "./pages/tenant/Settings";
 import DashboardFromTenant from "./pages/tenant/Dashboard";
+import ProductsPage from "./pages/tenant/products/ProductsPage";
 
 function ProtectedRouteForAdminBusiness({ redirectPath }: { redirectPath: string }) {
   const { userHasBusinessLevelRoleFor } = useAuth();
@@ -71,7 +72,7 @@ function App() {
         </Route>
         <Route element={<ProtectedRouteForAdminBusiness redirectPath={ALIASES.LOGIN} />}>
           <Route path={ALIASES.ADMIN.DASHBOARD} element={<DashboardFromTenant />} />
-          <Route path={ALIASES.ADMIN.USERS} element={<UsersFromSU />} />
+          <Route path={ALIASES.ADMIN.PRODUCTS} element={<ProductsPage />} />
           <Route path={ALIASES.ADMIN.SETTINGS} element={<SettingsFromTenant />} />
           <Route path={ALIASES.ADMIN.HELP} element={<HelpFromTenant />} />
         </Route>

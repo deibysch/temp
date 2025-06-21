@@ -33,7 +33,7 @@ export default function MenuSidebar({
       title: "Principal",
       items: [
         { id: "dashboard", icon: GaugeCircle, label: "Dashboard", badge: null, path: ALIASES.ADMIN.DASHBOARD.replace(":companyId", companyId || "") },
-        { id: "products", icon: Package, label: "Productos", badgeKey: "productsCount", path: ALIASES.ADMIN.USERS.replace(":companyId", companyId || "") },
+        { id: "products", icon: Package, label: "Productos", badgeKey: "productsCount", path: ALIASES.ADMIN.PRODUCTS.replace(":companyId", companyId || "") },
       ],
     },
     {

@@ -42,6 +42,8 @@ async function handleResponse<T>(promise: Promise<{ data: T }>) {
 }
 
 export async function GET(url: string, headers?: object) {
+  console.log(`GET request to ${url}`);
+  console.log(`with headers:`, { ...getAuthHeaders(), ...headers });
   return handleResponse(
     axios.get(url, {
       headers: { ...getAuthHeaders(), ...headers },

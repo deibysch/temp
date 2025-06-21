@@ -18,4 +18,6 @@ export const ENDPOINTS = {
   USERS: API_BASE_URL+"/users",
   ROLES: API_BASE_URL+"/roles",
   PERMISSIONS: API_BASE_URL+"/permissions",
+
+  PRODUCTS: API_BASE_URL+"/products",
 }

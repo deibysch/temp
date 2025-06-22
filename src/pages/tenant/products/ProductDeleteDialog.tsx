@@ -1,28 +1,28 @@
 import React from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import type { Company } from "@/types/company"
+import type { Product } from "@/types/product"
 
 interface Props {
   open: boolean
   setOpen: (open: boolean) => void
-  company: Company | null
+  product: Product | null
   onConfirm: () => void
 }
 
-const CompanyDeleteDialog: React.FC<Props> = ({ open, setOpen, company, onConfirm }) => (
+const ProductDeleteDialog: React.FC<Props> = ({ open, setOpen, product, onConfirm }) => (
   <Dialog open={open} onOpenChange={setOpen}>
     <DialogContent className="sm:max-w-md w-[calc(100%-2rem)] mx-auto" aria-describedby={undefined}>
       <DialogHeader>
-        <DialogTitle>¿Eliminar empresa?</DialogTitle>
+        <DialogTitle>¿Eliminar producto?</DialogTitle>
         <DialogDescription>
           Esta acción no se puede deshacer.
         </DialogDescription>
       </DialogHeader>
       <div className="py-2">
         <p>
-          ¿Estás seguro que deseas eliminar la empresa
-          <span className="font-semibold"> {company?.name}</span>?
+          ¿Estás seguro que deseas eliminar el producto
+          <span className="font-semibold"> {product?.name}</span>? Esta acción <span className="font-semibold text-red-600">no se puede deshacer</span>.
         </p>
       </div>
       <div className="flex justify-end gap-2 mt-4">
@@ -37,4 +37,4 @@ const CompanyDeleteDialog: React.FC<Props> = ({ open, setOpen, company, onConfir
   </Dialog>
 )
 
-export default CompanyDeleteDialog
+export default ProductDeleteDialog

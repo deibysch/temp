@@ -7,128 +7,102 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Search, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
-import type { Company } from "@/types/company"
+import type { Product } from "@/types/product"
 import { toast } from "@/components/ui/use-toast"
-import MenuSidebar from "@/layouts/MenuSU"
+import MenuSidebar from "@/layouts/MenuBusiness"
 import * as productsApi from "./productsApi"
 import ProductFormDialog from "./ProductFormDialog"
 import ProductDeleteDialog from "./ProductDeleteDialog"
 import Header from "@/layouts/Header"
-import * as categoriesApi from "@/pages/su/categories/categoriesApi"
-import type { Category } from "@/types/category"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 
 export default function Page() {
-  const [companies, setCompanies] = useState<Company[]>([])
+  const [products, setProducts] = useState<Product[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingCompany, setEditingCompany] = useState<Company | null>(null)
-  const [formData, setFormData] = useState<Partial<Company>>({})
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [formData, setFormData] = useState<Partial<Product>>({})
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("companies")
+  const [activeSection, setActiveSection] = useState("products")
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [companyToDelete, setCompanyToDelete] = useState<Company | null>(null)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null)
 
   const itemsPerPage = 6
 
-  const filteredCompanies = useMemo(() => {
-    return companies.filter(
-      (company) =>
-        company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (company.address?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
+  const filteredProducts = useMemo(() => {
+    return products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.description?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
     )
-  }, [companies, searchTerm])
+  }, [products, searchTerm])
 
-  const paginatedCompanies = useMemo(() => {
+  const paginatedProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
-    return filteredCompanies.slice(startIndex, startIndex + itemsPerPage)
-  }, [filteredCompanies, currentPage])
+    return filteredProducts.slice(startIndex, startIndex + itemsPerPage)
+  }, [filteredProducts, currentPage])
 
-  const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
 
   useEffect(() => {
-    fetchCategories()
+    fetchProducts()
   }, [])
 
   useEffect(() => {
-    fetchCompanies()
-  }, [selectedCategory])
-
-  useEffect(() => {
     setCurrentPage(1)
-  }, [searchTerm, selectedCategory])
+  }, [searchTerm])
 
-  const fetchCategories = async () => {
-    try {
-      const data = await categoriesApi.getCategories()
-      setCategories(data)
-    } catch (error) {
-      
-    }
-  }
-
-  const fetchCompanies = async () => {
-    // Si selectedCategory es "all", no filtrar por categoría
-    const data = await productsApi.getCompanies(selectedCategory !== "all" ? Number(selectedCategory) : undefined)
-    setCompanies(data)
+  const fetchProducts = async () => {
+    const data = await productsApi.getProducts() as Product[]
+    setProducts(data)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      if (editingCompany) {
-        await productsApi.updateCompany(editingCompany.id, formData)
-        toast({ title: "Actualizado", description: "Empresa actualizada correctamente" })
+      if (editingProduct) {
+        await productsApi.updateProduct(editingProduct.id, formData)
+        toast({ title: "Actualizado", description: "Producto actualizado correctamente" })
       } else {
-        await productsApi.createCompany(formData)
-        toast({ title: "Creado", description: "Empresa creada correctamente" })
+        await productsApi.createProduct(formData as Omit<Product, "id">)
+        toast({ title: "Creado", description: "Producto creado correctamente" })
       }
       setIsDialogOpen(false)
-      setEditingCompany(null)
+      setEditingProduct(null)
       setFormData({})
-      fetchCompanies()
+      fetchProducts()
     } catch (error) {
       // El toast de error ya lo muestra http.ts
     }
   }
 
-  const handleEdit = (company: Company) => {
-    setEditingCompany(company)
-    setFormData(company)
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product)
+    setFormData(product)
     setIsDialogOpen(true)
   }
 
-  const handleDeleteClick = (company: Company) => {
-    setCompanyToDelete(company)
+  const handleDeleteClick = (product: Product) => {
+    setProductToDelete(product)
     setDeleteDialogOpen(true)
   }
 
   const handleConfirmDelete = async () => {
-    if (!companyToDelete) return
+    if (!productToDelete) return
     try {
-      await productsApi.deleteCompany(companyToDelete.id)
-      fetchCompanies()
+      await productsApi.deleteProduct(productToDelete.id)
+      fetchProducts()
     } catch (error) {
     } finally {
       setDeleteDialogOpen(false)
-      setCompanyToDelete(null)
+      setProductToDelete(null)
     }
   }
 
   const openAddDialog = () => {
-    setEditingCompany(null)
+    setEditingProduct(null)
     setFormData({})
     setIsDialogOpen(true)
-  }
-
-  // Helper para obtener el nombre de la categoría por id
-  const getCategoryName = (categoryId?: number) => {
-    if (!categoryId) return "-"
-    const cat = categories.find(c => c.id === categoryId)
-    return cat ? cat.name : "-"
   }
 
   return (
@@ -139,50 +113,31 @@ export default function Page() {
         setSidebarOpen={setSidebarOpen}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
-        companiesCount={companies.length}
       />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
         <Header
-          title="Empresas"
+          title="Productos"
           onSidebarOpen={() => setSidebarOpen(true)}
         />
 
         {/* Content */}
         <main className="flex-1 p-4 max-w-7xl mx-auto w-full">
           <div className="space-y-6">
-            {/* Search, Category Filter and Add */}
+            {/* Search and Add */}
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
               <div className="flex flex-col sm:flex-row gap-2 flex-1 w-full max-w-2xl">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
-                    placeholder="Buscar empresas..."
+                    placeholder="Buscar productos..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10 border-0 bg-white dark:bg-gray-800 shadow-sm w-full"
                     autoComplete="off"
                   />
-                </div>
-                <div className="flex-1">
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={value => setSelectedCategory(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Todas las categorías" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todas las categorías</SelectItem>
-                      {categories.map(cat => (
-                        <SelectItem key={cat.id} value={String(cat.id)}>
-                          {cat.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -190,13 +145,13 @@ export default function Page() {
                   onClick={openAddDialog}
                   className="bg-green-600 dark:bg-green-600 text-white hover:bg-green-700 dark:hover:bg-green-700"
                 >
-                  + Nueva Empresa
+                  + Nuevo Producto
                 </Button>
                 <ProductFormDialog
                   open={isDialogOpen}
                   setOpen={setIsDialogOpen}
-                  editingCompany={editingCompany}
-                  setEditingCompany={setEditingCompany}
+                  product={editingProduct}
+                  setProduct={setEditingProduct}
                   formData={formData}
                   setFormData={setFormData}
                   onSubmit={handleSubmit}
@@ -211,34 +166,33 @@ export default function Page() {
                 <Table>
                   <TableHeader>
                     <TableRow className="border-b">
-                      <TableHead className="font-medium text-green-600 dark:text-green-400">Logo</TableHead>
+                      <TableHead className="font-medium text-green-600 dark:text-green-400">Imagen</TableHead>
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Nombre</TableHead>
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Descripción</TableHead>
-                      <TableHead className="font-medium text-green-600 dark:text-green-400">Categoría</TableHead>
                       <TableHead className="font-medium text-green-600 dark:text-green-400">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {paginatedCompanies.map((company) => (
-                      <TableRow key={company.id} className="border-b hover:bg-green-50 dark:hover:bg-emerald-900/70 transition-colors">
+                    {paginatedProducts.map((product) => (
+                      <TableRow key={product.id} className="border-b hover:bg-green-50 dark:hover:bg-emerald-900/70 transition-colors">
+                        {/* Renderizado seguro de campos opcionales */}
                         <TableCell>
-                          {company.photo_url && (
+                          {product.url_thumbnail && (
                             <img
-                              src={company.photo_url || "/placeholder.svg"}
-                              alt={company.name}
+                              src={product.url_thumbnail || "/placeholder.svg"}
+                              alt={product.name}
                               className="h-8 w-8 object-contain rounded"
                             />
                           )}
                         </TableCell>
-                        <TableCell className="font-medium">{company.name}</TableCell>
-                        <TableCell>{company.description}</TableCell>
-                        <TableCell>{getCategoryName(company.category_id)}</TableCell>
+                        <TableCell className="font-medium">{product.name}</TableCell>
+                        <TableCell>{product.description}</TableCell>
                         <TableCell>
                           <div className="flex gap-1">
                             <Button
                               size="sm"
                               variant="ghost"
-                              onClick={() => handleEdit(company)}
+                              onClick={() => handleEdit(product)}
                               className="text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
                             >
                               <Edit className="h-4 w-4" />
@@ -246,7 +200,7 @@ export default function Page() {
                             <Button
                               size="sm"
                               variant="ghost"
-                              onClick={() => handleDeleteClick(company)}
+                              onClick={() => handleDeleteClick(product)}
                               className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -262,7 +216,7 @@ export default function Page() {
 
             {/* Mobile Cards */}
             <div className="md:hidden space-y-3">
-              {paginatedCompanies.map((company) => (
+              {paginatedProducts.map((company) => (
                 <Card
                   key={company.id}
                   className="border-0 shadow-sm bg-white dark:bg-gray-800 hover:shadow-md transition-shadow"
@@ -270,9 +224,9 @@ export default function Page() {
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex items-center gap-2">
-                        {company.photo_url && (
+                        {company.url_thumbnail && (
                           <img
-                            src={company.photo_url || "/placeholder.svg"}
+                            src={company.url_thumbnail || "/placeholder.svg"}
                             alt={company.name}
                             className="h-8 w-8 object-contain rounded"
                           />
@@ -282,7 +236,6 @@ export default function Page() {
                     </div>
                     <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400 mb-3">
                       <p>{company.description}</p>
-                      <p>Categoría: {getCategoryName(company.category_id)}</p>
                     </div>
                     <div className="flex gap-2">
                       <Button
@@ -336,16 +289,16 @@ export default function Page() {
                 <span className="text-xs text-muted-foreground">
                   Visualizando registros {(currentPage - 1) * itemsPerPage + 1}
                   –
-                  {Math.min(currentPage * itemsPerPage, filteredCompanies.length)}
+                  {Math.min(currentPage * itemsPerPage, filteredProducts.length)}
                   {" de "}
-                  {filteredCompanies.length}
+                  {filteredProducts.length}
                 </span>
               </div>
             )}
             <ProductDeleteDialog
               open={deleteDialogOpen}
               setOpen={setDeleteDialogOpen}
-              company={companyToDelete}
+              product={productToDelete}
               onConfirm={handleConfirmDelete}
             />
           </div>
